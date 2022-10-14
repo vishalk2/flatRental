@@ -1,7 +1,5 @@
 package com.cg.flatRental.entity;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,7 +13,6 @@ public class Tenant {
 	private int tenantId;
 	private String tenantName;
 	private int tenantAge;
-	
 	private long tenantPhoneNumber;
 	public Tenant() {}
 	public Tenant(int tenantId, String tenantName, int tenantAge, long tenantPhoneNumber, String emailId) {

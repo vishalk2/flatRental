@@ -5,16 +5,24 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+@XmlRootElement
 @Entity
 public class LandLord {
-
 	@Id
 	@GeneratedValue
 	private int landLordId;
 	private String landLordName;
 	private int landLordAge;
+	@OneToMany(mappedBy="societyLandLord")
+	@JsonManagedReference
 	private List<Society> societyList;
+	@OneToMany(mappedBy="flatLandLord")
+	@JsonManagedReference
 	private List<Flat> flatList;
 	public LandLord() {}
 	public LandLord(int landLordId, String landLordName, int landLordAge, List<Society> societyList,
@@ -24,7 +32,7 @@ public class LandLord {
 		this.landLordName = landLordName;
 		this.landLordAge = landLordAge;
 		this.societyList = societyList;
-		this.flatList = flatList;
+		//this.flatList = flatList;
 		this.landLordPhoneNumber = landLordPhoneNumber;
 		this.landLordEmailId = landLordEmailId;
 	}
