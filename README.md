@@ -1,4 +1,4 @@
-# flatRental
-OnlineFlatRental Application by Vishal, Akash, Preetham
-Akash S
-preetham
+# OnlineFlatRental
+OnlineFlatRental Application by Vishal, Akash S, Preetham
+
+
