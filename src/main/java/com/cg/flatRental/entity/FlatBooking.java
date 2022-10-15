@@ -17,7 +17,7 @@ public class FlatBooking {
 	@JoinColumn(name ="flatId")
 	private Flat flat;
 	@OneToOne
-	@JoinColumn(name ="tenantId")
+	@JoinColumn(name ="userId")
 	private Tenant tenant;
 	private Date bookingFromDate;
 	private Date bookingToDate;

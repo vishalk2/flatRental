@@ -6,7 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
-//@Inheritance(strategy =InheritanceType.JOINED)
+
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @Table(name="user_info")
 public class User {

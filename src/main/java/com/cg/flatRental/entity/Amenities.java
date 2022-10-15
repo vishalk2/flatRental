@@ -8,15 +8,31 @@ public class Amenities {
 	private boolean swimmingPool;
 	private boolean carParking;
 	private String houseFacing;
+	private float squareFeet;
+	
+	public boolean isSwimmingPool() {
+		return swimmingPool;
+	}
+	public void setSwimmingPool(boolean swimmingPool) {
+		this.swimmingPool = swimmingPool;
+	}
+	public float getSquareFeet() {
+		return squareFeet;
+	}
+	public void setSquareFeet(float squareFeet) {
+		this.squareFeet = squareFeet;
+	}
 	public Amenities() {
 		
 	}
-	public Amenities(boolean garden, boolean swimmmingPool, boolean carParking, String houseFacing) {
+
+	public Amenities(boolean garden, boolean swimmingPool, boolean carParking, String houseFacing, float squareFeet) {
 		super();
 		this.garden = garden;
-		this.swimmingPool = swimmmingPool;
+		this.swimmingPool = swimmingPool;
 		this.carParking = carParking;
 		this.houseFacing = houseFacing;
+		this.squareFeet = squareFeet;
 	}
 	public boolean isGarden() {
 		return garden;

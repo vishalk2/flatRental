@@ -23,7 +23,7 @@ public class Flat {
 	private boolean isApproved;
 	
 	@ManyToOne
-	@JoinColumn(name="landLordId")
+	@JoinColumn(name="userId")
 	@JsonBackReference
 	private LandLord flatLandLord;
 	

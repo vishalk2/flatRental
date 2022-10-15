@@ -24,7 +24,7 @@ public class Society {
 	@JoinColumn(name="flatId")
 	private List<Flat> flatList;
 	@ManyToOne
-	@JoinColumn(name ="landLordId")
+	@JoinColumn(name ="userId")
 	@JsonBackReference
 	private LandLord societyLandLord;
 	@Embedded

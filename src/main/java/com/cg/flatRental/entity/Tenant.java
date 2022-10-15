@@ -1,33 +1,26 @@
 package com.cg.flatRental.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-public class Tenant {
-	@Id
-	@GeneratedValue
-	private int tenantId;
+@Table(name="tenant_info")
+public class Tenant extends User {
+
+	
 	private String tenantName;
 	private int tenantAge;
 	private long tenantPhoneNumber;
 	public Tenant() {}
-	public Tenant(int tenantId, String tenantName, int tenantAge, long tenantPhoneNumber, String emailId) {
+	public Tenant(String tenantName, int tenantAge, long tenantPhoneNumber, String emailId) {
 		super();
-		this.tenantId = tenantId;
+		
 		this.tenantName = tenantName;
 		this.tenantAge = tenantAge;
 		this.tenantPhoneNumber = tenantPhoneNumber;
 		this.emailId = emailId;
 	}
-	public int getTenantId() {
-		return tenantId;
-	}
-	public void setTenantId(int tenantId) {
-		this.tenantId = tenantId;
-	}
+
 	public String getTenantName() {
 		return tenantName;
 	}
