@@ -1,18 +1,14 @@
 package com.cg.flatRental.entity;
 
 import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-@XmlRootElement
 @Entity
-public class LandLord {
+public class LandLord extends User{
 	@Id
 	@GeneratedValue
 	private int landLordId;
@@ -32,7 +28,7 @@ public class LandLord {
 		this.landLordName = landLordName;
 		this.landLordAge = landLordAge;
 		this.societyList = societyList;
-		//this.flatList = flatList;
+		this.flatList = flatList;
 		this.landLordPhoneNumber = landLordPhoneNumber;
 		this.landLordEmailId = landLordEmailId;
 	}

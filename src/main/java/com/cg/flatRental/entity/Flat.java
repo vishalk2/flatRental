@@ -1,6 +1,8 @@
 package com.cg.flatRental.entity;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -10,43 +12,54 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @XmlRootElement
 @Entity
-
 public class Flat {
 	@Id
+	@GeneratedValue
 	private int flatId;
 	private int flatNo;
 	private String flatType;
+	private int rentalCost;
+	private boolean availability;
+	private boolean isApproved;
+	
 	@ManyToOne
 	@JoinColumn(name="landLordId")
 	@JsonBackReference
 	private LandLord flatLandLord;
-	@ManyToOne
-	@JoinColumn(name ="societyId")
-	@JsonBackReference
-	private Society society;
+	
+	@Embedded
+	private Address flatAddress;
+	
+	@Embedded
+	private Amenities flatAmenities;
 	public Flat() {}
-	public Flat(int flatId, int flatNo, String flatType, int rentalCost, String flatOwnername, boolean availability,
-			boolean isApproved) {
+	
+	public Address getFlatAddress() {
+		return flatAddress;
+	}
+
+	public void setFlatAddress(Address flatAddress) {
+		this.flatAddress = flatAddress;
+	}
+
+	public Flat(int flatId, int flatNo, String flatType, int rentalCost, boolean availability, boolean isApproved,
+			LandLord flatLandLord, Address flatAddress) {
 		super();
 		this.flatId = flatId;
 		this.flatNo = flatNo;
 		this.flatType = flatType;
 		this.rentalCost = rentalCost;
-		this.flatOwnername = flatOwnername;
 		this.availability = availability;
 		this.isApproved = isApproved;
+		this.flatLandLord = flatLandLord;
+		this.flatAddress = flatAddress;
 	}
+
 	public LandLord getFlatLandLord() {
 		return flatLandLord;
 	}
 	public void setFlatLandLord(LandLord flatLandLord) {
 		this.flatLandLord = flatLandLord;
-	}
-	public Society getSociety() {
-		return society;
-	}
-	public void setSociety(Society society) {
-		this.society = society;
 	}
 	public int getFlatId() {
 		return flatId;
@@ -72,12 +85,7 @@ public class Flat {
 	public void setRentalCost(int rentalCost) {
 		this.rentalCost = rentalCost;
 	}
-	public String getFlatOwnername() {
-		return flatOwnername;
-	}
-	public void setFlatOwnername(String flatOwnername) {
-		this.flatOwnername = flatOwnername;
-	}
+	
 	public boolean isAvailability() {
 		return availability;
 	}
@@ -90,8 +98,5 @@ public class Flat {
 	public void setApproved(boolean isApproved) {
 		this.isApproved = isApproved;
 	}
-	private int rentalCost;
-	private String flatOwnername;
-	private boolean availability;
-	private boolean isApproved;
+	
 }

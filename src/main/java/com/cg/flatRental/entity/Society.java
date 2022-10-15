@@ -2,44 +2,54 @@ package com.cg.flatRental.entity;
 
 import java.util.List;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 public class Society {
 	@Id
+	@GeneratedValue
 	private int societyId;
 	private String societyName;
-	private String city;
-	private String state;
-	private int pin;
 	private boolean isApproved;
-	@OneToMany(mappedBy="society")
-	@JsonManagedReference
+	@OneToMany
+	@JoinColumn(name="flatId")
 	private List<Flat> flatList;
 	@ManyToOne
 	@JoinColumn(name ="landLordId")
 	@JsonBackReference
-	LandLord societyLandLord;
-	Society(){}
-	public Society(int societyId, String societyName, String city, String state, int pin, boolean isApproved,
-			List<Flat> flatList, LandLord societyLandLord) {
+	private LandLord societyLandLord;
+	@Embedded
+	private Address societyAddress;
+	public Society(){}
+	
+	public Society(int societyId, String societyName, boolean isApproved, List<Flat> flatList, LandLord societyLandLord,
+			Address societyAddress) {
 		super();
 		this.societyId = societyId;
 		this.societyName = societyName;
-		this.city = city;
-		this.state = state;
-		this.pin = pin;
 		this.isApproved = isApproved;
-		this.flatList=flatList;
+		this.flatList = flatList;
 		this.societyLandLord = societyLandLord;
+		this.societyAddress = societyAddress;
 	}
+
+	public Address getSocietyAddress() {
+		return societyAddress;
+	}
+
+	public void setSocietyAddress(Address societyAddress) {
+		this.societyAddress = societyAddress;
+	}
+
 	public int getSocietyId() {
 		return societyId;
 	}
@@ -57,24 +67,6 @@ public class Society {
 	}
 	public void setSocietyName(String societyName) {
 		this.societyName = societyName;
-	}
-	public String getCity() {
-		return city;
-	}
-	public void setCity(String city) {
-		this.city = city;
-	}
-	public String getState() {
-		return state;
-	}
-	public void setState(String state) {
-		this.state = state;
-	}
-	public int getPin() {
-		return pin;
-	}
-	public void setPin(int pin) {
-		this.pin = pin;
 	}
 	public List<Flat> getFlatList() {
 		return flatList;
