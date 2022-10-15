@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-public class Tenant extends User  {
+public class Tenant {
 	@Id
 	@GeneratedValue
 	private int tenantId;

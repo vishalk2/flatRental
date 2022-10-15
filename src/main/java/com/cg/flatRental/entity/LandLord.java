@@ -8,7 +8,7 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-public class LandLord extends User{
+public class LandLord{
 	@Id
 	@GeneratedValue
 	private int landLordId;
