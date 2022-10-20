@@ -14,6 +14,9 @@ import com.cg.flatRental.entity.BookingRequest;
 public interface IBookingRequestRepository extends JpaRepository<BookingRequest, Integer>{
 	// CRUD operations
 	
+	@Query("select b.flat.flatId from BookingRequest b where b.reqId = :req")
+	public int getFlatIdByBookingRequestId(@Param("req") int reqId);
+	
 	// update booking request approval
 	@Query("update BookingRequest b set b.approved = :app where b.reqId = :req")
 	@Modifying
@@ -26,4 +29,8 @@ public interface IBookingRequestRepository extends JpaRepository<BookingRequest,
 	// all requests for a landlord
 	@Query("select b from BookingRequest b where b.flat.flatLandLord.userName = :uname")
 	public List<BookingRequest> getAllBookingRequestsByLandLordUserName(@Param("uname") String userName);
+	
+	// all requests for a landlord
+	@Query("select b from BookingRequest b where b.tenant.userName = :uname")
+	public List<BookingRequest> getAllBookingRequestsByTenantUserName(@Param("uname") String userName);
 }
