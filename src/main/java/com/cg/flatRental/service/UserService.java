@@ -1,85 +1,46 @@
 package com.cg.flatRental.service;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.cg.flatRental.entity.User;
-import com.cg.flatRental.exceptions.UserNotFoundException;
 import com.cg.flatRental.repository.IUserRepository;
+import com.cg.flatRental.secure.User;
+import com.cg.flatRental.secure.UserDto;
 
 @Component
-public class UserService implements IUserService {
-	
+public class UserService implements UserDetailsService {
+
 	@Autowired
 	private IUserRepository userRepository;
-
+	@Autowired
+	private PasswordEncoder bcryptEncoder;
 	@Override
-	public User addUserService(User user) {
-		User newUser = userRepository.save(user);
-		return newUser;
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		List<SimpleGrantedAuthority> roles = null;
+		User user = userRepository.findByUserName(username);
+		if (user == null) {
+			throw new UsernameNotFoundException("User not found with username: " + username);
+		}
+		roles = Arrays.asList(new SimpleGrantedAuthority(user.getUserType()));
+		System.out.println("Roles : "+roles);
+		return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
+				roles);
+	}
+	
+	public User save(com.cg.flatRental.secure.UserDto user) {
+		User newUser = new User();
+		newUser.setUserName(user.getUserName());
+		newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
+		newUser.setUserType(user.getUserType());
+		return userRepository.save(newUser);
 	}
 
-	@Override
-	public User deleteUserService(int userId) throws UserNotFoundException {
-		Optional<User> optionalUser = userRepository.findById(userId);
-		if(optionalUser.isPresent()) {
-			User user = optionalUser.get();
-			userRepository.deleteById(userId);
-			return user;
-		}
-		else {
-			throw new UserNotFoundException("User details not found!");
-		}
-	}
-
-	@Override
-	public User updateUserService(int userId, User user) throws UserNotFoundException {
-		Optional<User> optionalUser = userRepository.findById(userId);
-		if(optionalUser.isPresent()) {
-			userRepository.save(user);
-			return optionalUser.get();
-		}
-		else {
-			throw new UserNotFoundException("User details not found!");
-		}
-	}
-
-	@Override
-	public User viewUserService(int userId) throws UserNotFoundException {
-		Optional<User> optionalUser = userRepository.findById(userId);
-		if(optionalUser.isPresent()) {
-			return optionalUser.get();
-		}
-		else {
-			throw new UserNotFoundException("User details not found!");
-		}
-	}
-
-	@Override
-	public List<User> viewAllUsersService() {
-		List<User> userList = new ArrayList<>();
-		Iterable<User> users = userRepository.findAll();
-		users.forEach(u->userList.add(u));
-		return userList;
-	}
-
-	@Override
-	public boolean isValidUserService(String userName, String password) {
-		return userRepository.findByUserNameAndPassword(userName, password)!=null?true :false;
-	}
-
-	@Override
-	public User updateUserPasswordService(int userId, String newPassword) throws UserNotFoundException {
-		int u = userRepository.updateUserPassword(userId, newPassword);
-		if(u>0) {
-			return viewUserService(userId);
-		}
-		else {
-			throw new UserNotFoundException("User details not found!");
-		}
-	}
 }
