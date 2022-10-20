@@ -18,3 +18,4 @@ public interface IBookingRequestService {
 	public List<BookingRequest> getAllBookingRequestByLandLordUserName(String userName);
 	public List<BookingRequest> getAllBookingRequestByTenantUserName(String userName);
 }
+
