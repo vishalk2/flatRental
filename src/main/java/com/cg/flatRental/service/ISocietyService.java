@@ -29,3 +29,4 @@ public interface ISocietyService {
 	
 	public List<Society> getAllSocietyServiceByPincode(int pincode);
 }
+
