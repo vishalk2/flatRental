@@ -5,13 +5,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.cg.flatRental.entity.LandLord;
-import com.cg.flatRental.exceptions.LandLordNotFoundException;
+import com.cg.flatRental.exceptions.UserNotFoundException;
+import com.cg.flatRental.iservice.ILandLordService;
 import com.cg.flatRental.repository.ILandLordRepository;
 
-@Component
+@Service
 public class LandLordService implements ILandLordService {
 	
 	@Autowired
@@ -24,7 +25,7 @@ public class LandLordService implements ILandLordService {
 	}
 
 	@Override
-	public LandLord deleteLandLordService(int landlordId) throws LandLordNotFoundException {
+	public LandLord deleteLandLordService(long landlordId) throws UserNotFoundException {
 		Optional<LandLord> landlord = landlordRepository.findById(landlordId);
 		if(landlord.isPresent()) {
 			LandLord newLandLord = landlord.get();
@@ -32,31 +33,31 @@ public class LandLordService implements ILandLordService {
 			return newLandLord;
 		}
 		else {
-			throw new LandLordNotFoundException("Landlord details not found!");
+			 throw new UserNotFoundException("Landlord details not found!");
 		}
 	}
 
 	@Override
-	public LandLord getLandLordService(int landlordId) throws LandLordNotFoundException {
+	public LandLord getLandLordService(long landlordId) throws UserNotFoundException {
 		Optional<LandLord> landlord = landlordRepository.findById(landlordId);
 		if(landlord.isPresent()) {
 			LandLord newLandLord = landlord.get();
 			return newLandLord;
 		}
 		else {
-			throw new LandLordNotFoundException("Landlord details not found!");
+			 throw new UserNotFoundException("Landlord details not found!");
 		}
 	}
 
 	@Override
-	public LandLord updateLandLordService(int landlordId, LandLord landlord) throws LandLordNotFoundException {
+	public LandLord updateLandLordService(long landlordId, LandLord landlord) throws UserNotFoundException {
 		Optional<LandLord> optionalLandlord = landlordRepository.findById(landlordId);
 		if(optionalLandlord.isPresent()) {
 			landlordRepository.save(landlord);
 			return optionalLandlord.get();
 		}
 		else {
-			throw new LandLordNotFoundException("Landlord details not found!");
+			 throw new UserNotFoundException("Landlord details not found!");
 		}
 	}
 
@@ -69,8 +70,8 @@ public class LandLordService implements ILandLordService {
 	}
 
 	@Override
-	public int getUserIdByUserName(String userName) throws LandLordNotFoundException {
-		int userId = landlordRepository.findByUserName(userName).getUserId();
+	public long getUserIdByUserName(String userName) throws UserNotFoundException {
+		long userId = landlordRepository.findByUserName(userName).getUserId();
 		return userId;
 	}
 
@@ -80,37 +81,36 @@ public class LandLordService implements ILandLordService {
 	}
 
 	@Override
-	public LandLord updateLandLordAgeService(int userId, int newAge) throws LandLordNotFoundException {
+	public LandLord updateLandLordAgeService(long userId, int newAge) throws UserNotFoundException {
 		int l = landlordRepository.updateLandLordAge(userId, newAge);
 		if(l>0) {
 			return getLandLordService(userId);
 		}
 		else {
-			throw new LandLordNotFoundException("Landlord details not found!");
+			 throw new UserNotFoundException("Landlord details not found!");
 		}
 	}
 
 	@Override
-	public LandLord updateLandLordPhoneNumberService(int userId, long phoneNumber) throws LandLordNotFoundException {
+	public LandLord updateLandLordPhoneNumberService(long userId, long phoneNumber) throws UserNotFoundException {
 		int l = landlordRepository.updateLandLordPhoneNumber(userId, phoneNumber);
 		if(l>0) {
 			return getLandLordService(userId);
 		}
 		else {
-			throw new LandLordNotFoundException("Landlord details not found!");
+			 throw new UserNotFoundException("Landlord details not found!");
 		}
 	}
 
 	@Override
-	public LandLord updateLandLordEmailService(int userId, String email) throws LandLordNotFoundException {
+	public LandLord updateLandLordEmailService(long userId, String email) throws UserNotFoundException {
 		int l = landlordRepository.updateLandLordEmail(userId, email);
 		if(l>0) {
 			return getLandLordService(userId);
 		}
 		else {
-			throw new LandLordNotFoundException("Landlord details not found!");
+			 throw new UserNotFoundException("Landlord details not found!");
 		}
 	}
 	
 }
-
