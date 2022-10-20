@@ -10,8 +10,8 @@ import javax.validation.constraints.Size;
 @Table(name="admin_info")
 public class Admin extends User{
 	
-	@NotEmpty(message = "Tenant Name can't be empty!")
-	@Size(min = 3, max = 25, message = "Invalid Tenant name. Please enter a vaild Tenant name!")
+	@NotEmpty(message = "Admin Name can't be empty!")
+	@Size(min = 3, max = 25, message = "Invalid Admin name. Please enter a vaild name!")
 	@Pattern(regexp = "^[a-zA-Z]*$", message = "Accepts only alphabets! Re-enter the name")
 	private String adminName;
 	
