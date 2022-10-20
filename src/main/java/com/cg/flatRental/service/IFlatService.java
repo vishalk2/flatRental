@@ -8,7 +8,11 @@ import com.cg.flatRental.exceptions.FlatNotFoundException;
 
 public interface IFlatService {
 	
-	public Flat addFlatService(FlatDto flatDto);
+	public Flat updateFlatApprovalService(int flatId, boolean approved) throws FlatNotFoundException;
+	
+	public Flat updateFlatAvailabilityService(int flatId, boolean available) throws FlatNotFoundException;
+	
+	public Flat addFlatService(FlatDto flatDto) throws FlatNotFoundException;
 	
 	public Flat deleteFlatService(int flatId) throws FlatNotFoundException;
 	
