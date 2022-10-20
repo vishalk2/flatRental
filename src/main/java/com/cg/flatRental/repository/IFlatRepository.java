@@ -3,6 +3,7 @@ package com.cg.flatRental.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -11,6 +12,16 @@ import com.cg.flatRental.entity.Flat;
 
 @Repository
 public interface IFlatRepository extends JpaRepository<Flat, Integer> {
+	
+	// update flat approval
+	@Query("update Flat f set f.approved = :app where f.flatId = :fid")
+	@Modifying
+	public int updateFlatApproval(@Param("fid") int flatId, @Param("app") boolean approved);
+	
+	// update flat availability
+	@Query("update Flat f set f.available = :av where f.flatId = :fid and f.approved = true")
+	@Modifying
+	public int updateFlatAvailability(@Param("fid") int flatId, @Param("av") boolean available);
 	
 	// find flats by their rental cost
 	@Query("select f from Flat f where f.available = true and f.rentalCost <= :a")
