@@ -28,9 +28,6 @@ public class Society {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int societyId;
 	
-	@NotEmpty(message = "Society Name can't be empty!")
-	@Size(min = 3, max = 50, message = "Invalid Name. Please enter a vaild Username!")
-	@Pattern(regexp = "^[a-zA-Z]*$", message = "Accepts only alphabets! Re-enter the name")
 	private String societyName;
 	
 	@ManyToOne
