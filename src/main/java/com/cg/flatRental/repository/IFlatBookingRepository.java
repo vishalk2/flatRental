@@ -9,3 +9,4 @@ import com.cg.flatRental.entity.FlatBooking;
 public interface IFlatBookingRepository extends JpaRepository<FlatBooking, Integer> {
 	// CRUD operations
 }
+
