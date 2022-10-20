@@ -1,65 +1,84 @@
 package com.cg.flatRental.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cg.flatRental.dto.UserPasswordUpdateDto;
-import com.cg.flatRental.entity.User;
-import com.cg.flatRental.exceptions.UserNotFoundException;
-import com.cg.flatRental.service.IUserService;
+import com.cg.flatRental.config.JwtTokenUtil;
+import com.cg.flatRental.entity.LandLord;
+import com.cg.flatRental.repository.ILandLordRepository;
+import com.cg.flatRental.secure.JwtRequest;
+import com.cg.flatRental.secure.UserDto;
+import com.cg.flatRental.service.ILandLordService;
+import com.cg.flatRental.service.UserService;
+import com.cg.flatRental.secure.JwtResponse;
 
 @RestController
-@RequestMapping("/user")
-public class UserController {
+@CrossOrigin
+public class UserAuthenticationController {
+
+	@Autowired
+	private AuthenticationManager authenticationManager;
 	
 	@Autowired
-	private IUserService userService;
+	private JwtTokenUtil jwtTokenUtil;
 	
-	@PostMapping(produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	public ResponseEntity<User> addUser(@RequestBody @Valid User user){
-		return new ResponseEntity<>(userService.addUserService(user), HttpStatus.OK);
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private ILandLordService landLordService;
+	@Autowired
+	private PasswordEncoder bcryptEncoder;
+	
+	@PostMapping(value="/register")
+		public ResponseEntity<?> saveUser(@RequestBody UserDto userDto) throws Exception{
+		    if(userDto.getUserType().toLowerCase().equals("landlord")){
+		    	LandLord landlord = new LandLord();
+		    	landlord.setUserName(userDto.getUserName());
+		    	landlord.setPassword(bcryptEncoder.encode( userDto.getPassword()));
+		    	landlord.setUserType(userDto.getUserType());
+		    	landlord.setLandLordName(userDto.getName());
+		    	landlord.setLandLordAge(userDto.getUserAge());
+		    	landlord.setLandLordPhoneNumber(userDto.getUserPhoneNumber());
+		    	landlord.setLandLordEmailId(userDto.getEmailId());
+		    	return ResponseEntity.ok(landLordService.addLandLordService(landlord));
+		    	//return ResponseEntity.ok(userService.save(userDto));
+		    	
+		    }
+		    
+		    return null;
+			
+		}
+	@PostMapping(value="/login")
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest jwtRequest ) throws Exception{
+		authenticate(jwtRequest.getUserName(), jwtRequest.getPassword());
+
+		final UserDetails userDetails = userService.loadUserByUsername(jwtRequest.getUserName());
+
+		final String token = jwtTokenUtil.generateToken(userDetails);
+
+		return ResponseEntity.ok(new JwtResponse(token));
 	}
 	
-	@PutMapping(value="/{userId}",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	public ResponseEntity<User> updateUser(@PathVariable int userId, @Valid User user) throws UserNotFoundException{
-		return new ResponseEntity<>(userService.updateUserService(userId, user), HttpStatus.OK);
+	private void authenticate(String username, String password) throws Exception {
+		try {
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		} catch (DisabledException e) {
+			throw new Exception("USER_DISABLED", e);
+		} catch (BadCredentialsException e) {
+			throw new Exception("INVALID_CREDENTIALS", e);
+		}
 	}
 	
-	@DeleteMapping(value="/{userId}",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	public ResponseEntity<User> removeUser(@PathVariable int userId) throws UserNotFoundException{
-		return new ResponseEntity<>(userService.deleteUserService(userId), HttpStatus.OK);
-	}
-	
-	@GetMapping(value="/{userId}",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	public ResponseEntity<User> viewUser(@PathVariable int userId) throws UserNotFoundException{
-		return new ResponseEntity<>(userService.viewUserService(userId), HttpStatus.OK);
-	}
-	
-	@GetMapping(produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	public ResponseEntity<List<User>> viewAllUser(){
-		return new ResponseEntity<>(userService.viewAllUsersService(), HttpStatus.OK);
-	}
-	
-	@PutMapping(value="/updation/password",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	public ResponseEntity<User> updateUserPassword(@RequestBody UserPasswordUpdateDto userPasswordUpdateDto) throws UserNotFoundException{
-		return new ResponseEntity<>(userService.updateUserPasswordService(userPasswordUpdateDto.getUserId(), userPasswordUpdateDto.getPassword()), HttpStatus.OK);
-	}
-	
-	@GetMapping(value="/valid/{username}/{password}",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	public ResponseEntity<Boolean> isValidUser(@PathVariable String username, @PathVariable String password){
-		return new ResponseEntity<>(userService.isValidUserService(username, password),HttpStatus.OK);
-	}
 }
