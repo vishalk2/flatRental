@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.cg.flatRental.entity.Admin;
 
 @Repository
-public interface IAdminRepository extends JpaRepository<Admin, Integer> {
+public interface IAdminRepository extends JpaRepository<Admin, Long> {
 	// CRUD Operations
 }
