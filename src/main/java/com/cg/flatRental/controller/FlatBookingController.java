@@ -50,3 +50,4 @@ public class FlatBookingController {
 		return new ResponseEntity<>(flatbookingService.viewAllFlatBookingService(),HttpStatus.OK);
 	}
 }
+
