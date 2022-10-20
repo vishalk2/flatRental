@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,11 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cg.flatRental.dto.FlatApprovalDto;
+import com.cg.flatRental.dto.FlatAvailableDto;
 import com.cg.flatRental.dto.FlatDto;
 import com.cg.flatRental.entity.Flat;
 import com.cg.flatRental.exceptions.FlatNotFoundException;
 import com.cg.flatRental.service.IFlatService;
 
+@Validated
 @RestController
 @RequestMapping("/flat")
 public class FlatController {
@@ -29,8 +33,20 @@ public class FlatController {
 	@Autowired
 	private IFlatService flatService;
 	
+	@PutMapping(value="/approval/{flatId}",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
+	// accessible only to admin
+	public ResponseEntity<Flat> updateFlatApproval(@RequestBody FlatApprovalDto flatApprovalDto) throws FlatNotFoundException{
+		return new ResponseEntity<>(flatService.updateFlatApprovalService(flatApprovalDto.getFlatId(), flatApprovalDto.isApproved()),HttpStatus.OK);
+	}
+	
+	@PutMapping(value="/available/{flatId}",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
+	// accessible only to landlord
+	public ResponseEntity<Flat> updateFlatAvailable(@RequestBody FlatAvailableDto flatAvailableDto) throws FlatNotFoundException{
+		return new ResponseEntity<>(flatService.updateFlatAvailabilityService(flatAvailableDto.getFlatId(), flatAvailableDto.isAvailable()),HttpStatus.OK);
+	}
+	
 	@PostMapping(produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	public ResponseEntity<Flat> addFlat(@RequestBody @Valid FlatDto flatDto){
+	public ResponseEntity<Flat> addFlat(@RequestBody @Valid FlatDto flatDto) throws FlatNotFoundException{
 		return new ResponseEntity<>(flatService.addFlatService(flatDto),HttpStatus.OK);
 	}
 	
