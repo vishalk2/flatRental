@@ -31,7 +31,7 @@ public class FlatService implements IFlatService {
 	private ISocietyRepository societyRepository;
 
 	@Override
-	public Flat addFlatService(FlatDto flatDto) {
+	public Flat addFlatService(FlatDto flatDto) throws FlatNotFoundException {
 		Flat flat = converterToDtoFromEntity(flatDto);
 		Flat newFlat = flatRepository.save(flat);
 		return newFlat;
@@ -168,7 +168,7 @@ public class FlatService implements IFlatService {
 		return flatList;
 	}
 	
-	public Flat converterToDtoFromEntity(FlatDto flatDto) {
+	public Flat converterToDtoFromEntity(FlatDto flatDto) throws FlatNotFoundException {
 		int landlordId = flatDto.getLandlordId();
 		int societyId = flatDto.getSocietyId();
 		Optional<LandLord> optionalLandlord = landlordRepository.findById(landlordId);
@@ -206,7 +206,30 @@ public class FlatService implements IFlatService {
 			
 			return flat;
 		}
-		System.out.println("Throw some exception");
-		return null;
+		else {
+			throw new FlatNotFoundException("Flat details not found!");
+		}
+	}
+
+	@Override
+	public Flat updateFlatApprovalService(int flatId, boolean approved) throws FlatNotFoundException {
+		int f = flatRepository.updateFlatApproval(flatId, approved);
+		if(f>0) {
+			return getFlatService(flatId);
+		}
+		else {
+			throw new FlatNotFoundException("Flat details not found!");
+		}
+	}
+
+	@Override
+	public Flat updateFlatAvailabilityService(int flatId, boolean available) throws FlatNotFoundException {
+		int f = flatRepository.updateFlatAvailability(flatId, available);
+		if(f>0) {
+			return getFlatService(flatId);
+		}
+		else {
+			throw new FlatNotFoundException("Flat details not found!");
+		}
 	}
 }
