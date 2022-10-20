@@ -5,13 +5,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.cg.flatRental.entity.Admin;
-import com.cg.flatRental.exceptions.AdminNotFoundException;
+import com.cg.flatRental.exceptions.UserNotFoundException;
+import com.cg.flatRental.iservice.IAdminService;
 import com.cg.flatRental.repository.IAdminRepository;
 
-@Component
+@Service
 public class AdminService implements IAdminService {
 	
 	@Autowired
@@ -24,14 +25,14 @@ public class AdminService implements IAdminService {
 	}
 
 	@Override
-	public Admin getAdminService(int adminId) throws AdminNotFoundException {
+	public Admin getAdminService(long adminId) throws UserNotFoundException {
 		Optional<Admin> optionalAdmin = adminRepository.findById(adminId);
 		if(optionalAdmin.isPresent()) {
 			Admin admin = optionalAdmin.get();
 			return admin;
 		}
 		else {
-			throw new AdminNotFoundException("Admin Details not found!");
+			 throw new UserNotFoundException("Admin Details not found!");
 		}
 	}
 
