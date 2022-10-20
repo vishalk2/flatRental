@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.cg.flatRental.secure.User;
 
 
-public interface IUserRepository extends JpaRepository<User, Integer>{
+public interface IUserRepository extends JpaRepository<User, Long>{
 
 	User findByUserName(String userName);
 	
