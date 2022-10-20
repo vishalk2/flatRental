@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cg.flatRental.dto.BookingRequestDto;
@@ -14,11 +14,14 @@ import com.cg.flatRental.entity.Flat;
 import com.cg.flatRental.entity.Tenant;
 import com.cg.flatRental.exceptions.BookingRequestNotFoundException;
 import com.cg.flatRental.exceptions.FlatAvailabilityException;
+import com.cg.flatRental.exceptions.FlatNotFoundException;
+import com.cg.flatRental.exceptions.UserNotFoundException;
+import com.cg.flatRental.iservice.IBookingRequestService;
 import com.cg.flatRental.repository.IBookingRequestRepository;
 import com.cg.flatRental.repository.IFlatRepository;
 import com.cg.flatRental.repository.ITenantRepository;
 
-@Component
+@Service
 public class BookingRequestService implements IBookingRequestService {
 	
 	@Autowired
@@ -31,10 +34,24 @@ public class BookingRequestService implements IBookingRequestService {
 	private ITenantRepository tenantRepository;
 
 	@Override
-	public BookingRequest addBookingRequestService(BookingRequestDto bookingReqDto) throws BookingRequestNotFoundException {
-		BookingRequest bookingReq = converterToDtoFromEntity(bookingReqDto);
-		BookingRequest newBookingReq = bookingrequestRepository.save(bookingReq);
-		return newBookingReq;
+	public BookingRequest addBookingRequestService(BookingRequestDto bookingReqDto) throws FlatNotFoundException, FlatAvailabilityException, BookingRequestNotFoundException {
+		int flatId = bookingrequestRepository.getFlatIdByBookingRequestId(bookingReqDto.getFlatId());
+		Optional<Flat> optionalFlat = flatRepository.findById(flatId);
+		if(optionalFlat.isPresent()) {
+			Flat flat = optionalFlat.get();
+			if(flat.isAvailable()) {
+				BookingRequest bookingReq = converterToDtoFromEntity(bookingReqDto);
+				BookingRequest newBookingReq = bookingrequestRepository.save(bookingReq);
+				return newBookingReq;
+			}
+			else {
+				throw new FlatAvailabilityException("Flat not available");
+			}
+		}
+		else {
+			throw new FlatNotFoundException("Flat details not found!");
+		}
+		
 	}
 
 	@Override
@@ -46,7 +63,7 @@ public class BookingRequestService implements IBookingRequestService {
 			return bookingRequest;
 		}
 		else {
-			throw new BookingRequestNotFoundException("Booking details not found!");
+			 throw new BookingRequestNotFoundException("Booking details not found!");
 		}
 	}
 
@@ -59,7 +76,7 @@ public class BookingRequestService implements IBookingRequestService {
 			return bookingRequest;
 		}
 		else {
-			throw new BookingRequestNotFoundException("Booking details not found!");
+			 throw new BookingRequestNotFoundException("Booking details not found!");
 		}
 	}
 
@@ -71,7 +88,7 @@ public class BookingRequestService implements IBookingRequestService {
 			return bookingRequest;
 		}
 		else {
-			throw new BookingRequestNotFoundException("Booking details not found!");
+			 throw new BookingRequestNotFoundException("Booking details not found!");
 		}
 	}
 
@@ -85,7 +102,7 @@ public class BookingRequestService implements IBookingRequestService {
 	
 	public BookingRequest converterToDtoFromEntity(BookingRequestDto bookingReqDto) throws BookingRequestNotFoundException {
 		int flatId = bookingReqDto.getFlatId();
-		int tenantId = bookingReqDto.getTenantId();
+		long tenantId = bookingReqDto.getTenantId();
 		Optional<Flat> optionalFlat = flatRepository.findById(flatId);
 		Optional<Tenant> optionalTenant = tenantRepository.findById(tenantId);
 		if(optionalFlat.isPresent() && optionalTenant.isPresent()) {
@@ -102,13 +119,13 @@ public class BookingRequestService implements IBookingRequestService {
 			return bookingReq;
 		}
 		else {
-			throw new BookingRequestNotFoundException("Booking details not found!");
+			 throw new BookingRequestNotFoundException("Booking details not found!");
 		}
 	}
 
 	@Override
 	@Transactional
-	public BookingRequest updateBookingRequestApproval(int reqId, boolean approval) throws BookingRequestNotFoundException, FlatAvailabilityException  {
+	public BookingRequest updateBookingRequestApproval(int reqId, boolean approval) throws BookingRequestNotFoundException, FlatAvailabilityException {
 		int br = bookingrequestRepository.updateBookingRequestApproval(reqId,approval);
 		if(br>0) {
 			int flatId = bookingrequestRepository.getFlatIdByBookingRequestId(reqId);
@@ -117,11 +134,11 @@ public class BookingRequestService implements IBookingRequestService {
 				return viewBookingRequestService(reqId);
 			}
 			else {
-				throw new FlatAvailabilityException("Flat availability could not be updated");
+				 throw new FlatAvailabilityException("Flat availability could not be updated");
 			}
 		}
 		else {
-			throw new BookingRequestNotFoundException("Booking request details not found!");
+			 throw new BookingRequestNotFoundException("Booking request details not found!");
 		}
 	}
 
@@ -134,7 +151,7 @@ public class BookingRequestService implements IBookingRequestService {
 	}
 
 	@Override
-	public List<BookingRequest> getAllBookingRequestByLandLordUserName(String userName) {
+	public List<BookingRequest> getAllBookingRequestByLandLordUserName(String userName) throws UserNotFoundException {
 		List<BookingRequest> bookingRequestList = new ArrayList<>();
 		Iterable<BookingRequest> bookingRequests = bookingrequestRepository.getAllBookingRequestsByLandLordUserName(userName);
 		bookingRequests.forEach(br->bookingRequestList.add(br));
@@ -142,7 +159,7 @@ public class BookingRequestService implements IBookingRequestService {
 	}
 
 	@Override
-	public List<BookingRequest> getAllBookingRequestByTenantUserName(String userName) {
+	public List<BookingRequest> getAllBookingRequestByTenantUserName(String userName) throws UserNotFoundException{
 		List<BookingRequest> bookingRequestList = new ArrayList<>();
 		Iterable<BookingRequest> bookingRequests = bookingrequestRepository.getAllBookingRequestsByTenantUserName(userName);
 		bookingRequests.forEach(br->bookingRequestList.add(br));
