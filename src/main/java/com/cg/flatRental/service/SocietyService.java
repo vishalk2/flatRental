@@ -105,3 +105,4 @@ public class SocietyService implements ISocietyService {
 		return societiesList;
 	}
 }
+
