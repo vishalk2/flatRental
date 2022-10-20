@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cg.flatRental.dto.FlatDto;
 import com.cg.flatRental.entity.Address;
@@ -14,11 +15,12 @@ import com.cg.flatRental.entity.Flat;
 import com.cg.flatRental.entity.LandLord;
 import com.cg.flatRental.entity.Society;
 import com.cg.flatRental.exceptions.FlatNotFoundException;
+import com.cg.flatRental.iservice.IFlatService;
 import com.cg.flatRental.repository.IFlatRepository;
 import com.cg.flatRental.repository.ILandLordRepository;
 import com.cg.flatRental.repository.ISocietyRepository;
 
-@Component
+@Service
 public class FlatService implements IFlatService {
 	
 	@Autowired
@@ -46,7 +48,7 @@ public class FlatService implements IFlatService {
 			return flat;
 		}
 		else {
-			throw new FlatNotFoundException("Flat details not found!");
+			 throw new FlatNotFoundException("Flat details not found!");
 		}
 	}
 
@@ -58,7 +60,7 @@ public class FlatService implements IFlatService {
 			return flat;
 		}
 		else {
-			throw new FlatNotFoundException("Flat details not found!");
+			 throw new FlatNotFoundException("Flat details not found!");
 		}
 	}
 
@@ -71,7 +73,7 @@ public class FlatService implements IFlatService {
 			return updatedFlat;
 		}
 		else {
-			throw new FlatNotFoundException("Flat details not found!");
+			 throw new FlatNotFoundException("Flat details not found!");
 		}
 	}
 
@@ -169,7 +171,7 @@ public class FlatService implements IFlatService {
 	}
 	
 	public Flat converterToDtoFromEntity(FlatDto flatDto) throws FlatNotFoundException {
-		int landlordId = flatDto.getLandlordId();
+		long landlordId = flatDto.getLandlordId();
 		int societyId = flatDto.getSocietyId();
 		Optional<LandLord> optionalLandlord = landlordRepository.findById(landlordId);
 		Optional<Society> optionalSociety = societyRepository.findById(societyId);
@@ -207,29 +209,57 @@ public class FlatService implements IFlatService {
 			return flat;
 		}
 		else {
-			throw new FlatNotFoundException("Flat details not found!");
+			 throw new FlatNotFoundException("Flat details not found!");
 		}
 	}
 
 	@Override
+	@Transactional
 	public Flat updateFlatApprovalService(int flatId, boolean approved) throws FlatNotFoundException {
 		int f = flatRepository.updateFlatApproval(flatId, approved);
 		if(f>0) {
 			return getFlatService(flatId);
 		}
 		else {
-			throw new FlatNotFoundException("Flat details not found!");
+			 throw new FlatNotFoundException("Flat details not found!");
 		}
 	}
 
 	@Override
+	@Transactional
 	public Flat updateFlatAvailabilityService(int flatId, boolean available) throws FlatNotFoundException {
 		int f = flatRepository.updateFlatAvailability(flatId, available);
 		if(f>0) {
 			return getFlatService(flatId);
 		}
 		else {
-			throw new FlatNotFoundException("Flat details not found!");
+			 throw new FlatNotFoundException("Flat details not found!");
+		}
+	}
+
+	@Override
+	@Transactional
+	public Flat updateFlatAddress(int flatId, Address address) throws FlatNotFoundException {
+		int f = flatRepository.updateFlatAddress(flatId, address.getArea(), address.getCity(),
+				address.getState(), address.getCountry(), address.getPinCode());
+		if(f>0) {
+			return getFlatService(flatId);
+		}
+		else {
+			 throw new FlatNotFoundException("Flat details not found!");
+		}
+	}
+
+	@Override
+	@Transactional
+	public Flat updateFlatAmenities(int flatId, Amenities amenities) throws FlatNotFoundException {
+		int f = flatRepository.updateFlatAmenities(flatId, amenities.isGarden(), amenities.isSwimmingPool(),
+				amenities.isCarParking(), amenities.getHouseFacing(), amenities.getSquareFeet());
+		if(f>0) {
+			return getFlatService(flatId);
+		}
+		else {
+			 throw new FlatNotFoundException("Flat details not found!");
 		}
 	}
 }
