@@ -27,3 +27,4 @@ public interface ILandLordService {
 	
 	public LandLord updateLandLordEmailService(int userId, String email) throws LandLordNotFoundException;
 }
+
