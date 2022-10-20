@@ -9,6 +9,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,13 +17,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.flatRental.config.JwtTokenUtil;
+import com.cg.flatRental.entity.Admin;
 import com.cg.flatRental.entity.LandLord;
+import com.cg.flatRental.entity.Tenant;
 import com.cg.flatRental.repository.ILandLordRepository;
 import com.cg.flatRental.secure.JwtRequest;
 import com.cg.flatRental.secure.UserDto;
-import com.cg.flatRental.service.ILandLordService;
+import com.cg.flatRental.iservice.IAdminService;
+import com.cg.flatRental.iservice.ILandLordService;
+import com.cg.flatRental.iservice.ITenantService;
 import com.cg.flatRental.service.UserService;
 import com.cg.flatRental.secure.JwtResponse;
+import com.cg.flatRental.secure.User;
+
 
 @RestController
 @CrossOrigin
@@ -36,8 +43,16 @@ public class UserAuthenticationController {
 	
 	@Autowired
 	private UserService userService;
+	
 	@Autowired
 	private ILandLordService landLordService;
+	
+	@Autowired
+	private ITenantService tenantService;
+	
+	@Autowired
+	private IAdminService adminService;
+	
 	@Autowired
 	private PasswordEncoder bcryptEncoder;
 	
@@ -54,10 +69,32 @@ public class UserAuthenticationController {
 		    	landlord.setLandLordEmailId(userDto.getEmailId());
 		    	return ResponseEntity.ok(landLordService.addLandLordService(landlord));
 		    	//return ResponseEntity.ok(userService.save(userDto));
-		    	
 		    }
-		    
-		    return null;
+		    else if(userDto.getUserType().toLowerCase().equals("tenant")) {
+		    	Tenant tenant = new Tenant();
+		    	tenant.setUserName(userDto.getUserName());
+		    	tenant.setPassword(bcryptEncoder.encode(userDto.getPassword()));
+		    	tenant.setUserType(userDto.getUserType());
+		    	tenant.setTenantName(userDto.getName());
+		    	tenant.setTenantAge(userDto.getUserAge());
+		    	tenant.setTenantPhoneNumber(userDto.getUserPhoneNumber());
+		    	tenant.setEmailId(userDto.getEmailId());
+		    	return ResponseEntity.ok(tenantService.addTenantService(tenant));
+		    }
+		    else if(userDto.getUserType().toLowerCase().equals("admin")) {
+		    	Admin admin = new Admin();
+		    	admin.setUserName(userDto.getUserName());
+		    	admin.setPassword(bcryptEncoder.encode(userDto.getPassword()));
+		    	admin.setUserType(userDto.getUserType());
+		    	admin.setAdminName(userDto.getName());
+		    	admin.setAdminAge(userDto.getUserAge());
+		    	admin.setAdminContact(userDto.getUserPhoneNumber());
+		    	admin.setAdminEmailId(userDto.getEmailId());
+		    	return ResponseEntity.ok(adminService.addAdminService(admin));
+		    }
+		    else {
+		    	throw new Exception("User could not be created");
+		    }
 			
 		}
 	@PostMapping(value="/login")
