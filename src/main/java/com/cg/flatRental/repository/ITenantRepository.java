@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import com.cg.flatRental.entity.Tenant;
 
 
-public interface ITenantRepository extends JpaRepository<Tenant, Integer> {
+public interface ITenantRepository extends JpaRepository<Tenant, Long> {
 	
 	// find tenant by user name and password
 	public Tenant findByUserNameAndPassword(String userName, String password);
@@ -19,15 +19,15 @@ public interface ITenantRepository extends JpaRepository<Tenant, Integer> {
 	// update tenant age
 	@Query("update Tenant t set t.tenantAge = :age where t.userId = :uid")
 	@Modifying
-	public int updateTenantAge(@Param("uid") int userId, @Param("age") int newAge);
+	public int updateTenantAge(@Param("uid") long userId, @Param("age") int newAge);
 	
 	// update tenant phone number
 	@Query("update Tenant t set t.tenantPhoneNumber = :phno where t.userId = :uid")
 	@Modifying
-	public int updateTenantPhoneNumber(@Param("uid") int userId, @Param("phno") long newPhoneNumber);
+	public int updateTenantPhoneNumber(@Param("uid") long userId, @Param("phno") long newPhoneNumber);
 	
 	// update tenant email
 	@Query("update Tenant t set t.emailId = :email where t.userId = :uid")
 	@Modifying
-	public int updateTenantEmail(@Param("uid") int userId, @Param("email") String newEmail);
+	public int updateTenantEmail(@Param("uid") long userId, @Param("email") String newEmail);
 }
