@@ -5,13 +5,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.cg.flatRental.entity.Tenant;
-import com.cg.flatRental.exceptions.TenantNotFoundException;
+import com.cg.flatRental.exceptions.UserNotFoundException;
+import com.cg.flatRental.iservice.ITenantService;
 import com.cg.flatRental.repository.ITenantRepository;
 
-@Component
+@Service
 public class TenantService implements ITenantService{
 	
 	@Autowired
@@ -24,7 +25,7 @@ public class TenantService implements ITenantService{
 	}
 
 	@Override
-	public Tenant deleteTenantService(int tenantId) throws TenantNotFoundException {
+	public Tenant deleteTenantService(long tenantId) throws UserNotFoundException {
 		Optional<Tenant> optionalTenant = tenantRepository.findById(tenantId);
 		if(optionalTenant.isPresent()) {
 			Tenant newTenant = optionalTenant.get();
@@ -32,24 +33,24 @@ public class TenantService implements ITenantService{
 			return newTenant;
 		}
 		else {
-			throw new TenantNotFoundException("Tenant details not found!");
+			 throw new UserNotFoundException("Tenant details not found!");
 		}
 	}
 
 	@Override
-	public Tenant getTenantService(int tenantId) throws TenantNotFoundException {
+	public Tenant getTenantService(long tenantId) throws UserNotFoundException {
 		Optional<Tenant> optionalTenant = tenantRepository.findById(tenantId);
 		if(optionalTenant.isPresent()) {
 			Tenant newTenant = optionalTenant.get();
 			return newTenant;
 		}
 		else {
-			throw new TenantNotFoundException("Tenant details not found!");
+			 throw new UserNotFoundException("Tenant details not found!");
 		}
 	}
 
 	@Override
-	public Tenant updateTenantService(int tenantId, Tenant tenant) throws TenantNotFoundException {
+	public Tenant updateTenantService(long tenantId, Tenant tenant) throws UserNotFoundException {
 		Optional<Tenant> optionalTenant = tenantRepository.findById(tenantId);
 		if(optionalTenant.isPresent()) {
 			tenantRepository.save(tenant);
@@ -57,7 +58,7 @@ public class TenantService implements ITenantService{
 			
 		}
 		else {
-			throw new TenantNotFoundException("Tenant details not found!");
+			 throw new UserNotFoundException("Tenant details not found!");
 		}
 	}
 
@@ -70,8 +71,8 @@ public class TenantService implements ITenantService{
 	}
 
 	@Override
-	public int getUserIdByUserName(String userName) throws TenantNotFoundException {
-		int userId = tenantRepository.findByUserName(userName).getUserId();
+	public long getUserIdByUserName(String userName) throws UserNotFoundException {
+		long userId = tenantRepository.findByUserName(userName).getUserId();
 		return userId;
 	}
 
@@ -81,36 +82,35 @@ public class TenantService implements ITenantService{
 	}
 
 	@Override
-	public Tenant updateTenantAgeService(int tenantId, int newAge) throws TenantNotFoundException {
+	public Tenant updateTenantAgeService(long tenantId, int newAge) throws UserNotFoundException {
 		int t = tenantRepository.updateTenantAge(tenantId, newAge);
 		if(t>0) {
 			return getTenantService(tenantId);
 		}
 		else {
-			throw new TenantNotFoundException("Tenant details not found! Tenant could not be updated!");
+			 throw new UserNotFoundException("Tenant details not found! Tenant could not be updated!");
 		}
 	}
 
 	@Override
-	public Tenant updateTenantPhoneNumberService(int tenantId, long phoneNumber) throws TenantNotFoundException {
+	public Tenant updateTenantPhoneNumberService(long tenantId, long phoneNumber) throws UserNotFoundException {
 		int t = tenantRepository.updateTenantPhoneNumber(tenantId, phoneNumber);
 		if(t>0) {
 			return getTenantService(tenantId);
 		}
 		else {
-			throw new TenantNotFoundException("Tenant details not found! Tenant could not be updated!");
+			 throw new UserNotFoundException("Tenant details not found! Tenant could not be updated!");
 		}
 	}
 
 	@Override
-	public Tenant updateTenantEmailService(int tenantId, String email) throws TenantNotFoundException {
+	public Tenant updateTenantEmailService(long tenantId, String email) throws UserNotFoundException {
 		int t = tenantRepository.updateTenantEmail(tenantId, email);
 		if(t>0) {
 			return getTenantService(tenantId);
 		}
 		else {
-			throw new TenantNotFoundException("Tenant details not found! Tenant could not be updated!");
+			 throw new UserNotFoundException("Tenant details not found! Tenant could not be updated!");
 		}
 	}
 }
-
