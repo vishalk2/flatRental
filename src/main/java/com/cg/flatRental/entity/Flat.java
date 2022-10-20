@@ -27,18 +27,10 @@ public class Flat {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int flatId;
 	
-//	@NotEmpty(message = "Flat Number can't be empty!")
-//	@Size(min = 1, max=999, message = "Invalid number. Please enter a vaild flat number.")
-//	@Pattern(regexp = "^[0-9][0-9]{0,2}$", message = "Invalid input:Enter numbers only")
 	private int flatNo;
 	
-//	@NotEmpty(message = "Flat type can't be empty!")
-//	@Size(min = 3, max = 25, message = "Invalid Entry. Please enter a vaild Flat type!")
-//	@Pattern(regexp = "^[a-zA-Z]*$", message = "Accepts only alphabets! Re-enter the name")
 	private String flatType;
 	
-//	@NotEmpty(message = "Rental Cost can't be empty!")
-//	@DecimalMin(value = "0", message = "Rental Cost should not be zero")
 	private double rentalCost;
 	
 	@ManyToOne
