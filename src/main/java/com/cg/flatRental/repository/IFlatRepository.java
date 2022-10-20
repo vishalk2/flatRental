@@ -23,6 +23,27 @@ public interface IFlatRepository extends JpaRepository<Flat, Integer> {
 	@Modifying
 	public int updateFlatAvailability(@Param("fid") int flatId, @Param("av") boolean available);
 	
+	
+	// update flat address
+	@Query("update Flat s set s.flatAddress.area = :area, "
+			+ "s.flatAddress.city = :city, s.flatAddress.state = :state, "
+			+ "s.flatAddress.country = :country, "
+			+ "s.flatAddress.pincode = :pin where s.flatId = :fid")
+	@Modifying
+	public int updateFlatAddress(@Param("fid") int flatId, @Param("area") String area,
+			@Param("city") String city, @Param("state") String state, 
+			@Param("country") String country, @Param("pin") int pincode);
+	
+	
+	// update flat amenities
+	@Query("update Flat f set f.flatAmenities.garden = :g, f.flatAmenities.swimmingPool = :sp,"
+			+ "f.flatAmenities.carParking = :cp, f.flatAmenities.houseFacing = :hf,"
+			+ "f.flatAmenities.squareFeet = :sf where f.flatId = :fid")
+	@Modifying
+	public int updateFlatAmenities(@Param("fid") int flatId, @Param("g") boolean garden,
+			@Param("sp") boolean swimmingPool, @Param("cp") boolean carParking,
+			@Param("hf") String houseFacing, @Param("sf") double squareFeet);
+	
 	// find flats by their rental cost
 	@Query("select f from Flat f where f.available = true and f.rentalCost <= :a")
 	public List<Flat> findFlatsByRentalCost(@Param("a") double rentalCost);
