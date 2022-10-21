@@ -1,0 +1,75 @@
+package com.cg.flatRental.flat;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.cg.flatRental.entity.Address;
+import com.cg.flatRental.entity.Amenities;
+import com.cg.flatRental.entity.Flat;
+import com.cg.flatRental.entity.LandLord;
+import com.cg.flatRental.exceptions.LandLordNotFoundException;
+import com.cg.flatRental.exceptions.UserNotFoundException;
+import com.cg.flatRental.repository.ILandLordRepository;
+import com.cg.flatRental.service.LandLordService;
+
+@ExtendWith(MockitoExtension.class)
+public class TestLandLordService {
+	@Mock
+	ILandLordRepository landLordRepository;
+	@InjectMocks
+	LandLordService landLordService;
+	LandLord landlord1;
+	LandLord landlord2;
+	Flat flat1;
+	Flat flat2;
+	List<Flat> flatList = new ArrayList<>();
+	List<LandLord> landlordList = new ArrayList<>();
+
+	@BeforeEach
+	public void setUp() {
+		landlord1 = new LandLord("landlord name 1",45,null,null,1234567890,"l1@gmail.com", null);
+		landlord1 = new LandLord("landlord name 2",57,null,null,1234567890,"l2@gmail.com", null);
+		flat1 = new Flat(101, "villa", 15000,null,null, true, true,  new Address("Benz circle","Vijayawada","Andhra Pradesh","India",500321),new Amenities(true,true,true,"west",15));
+		flat2 = new Flat(102, "individual", 10000,null,null, true, true, new Address("Uppal","Hyderabad","Telangana","India",500001) ,new Amenities(true,true,true,"east",12));
+		flatList.add(flat1);
+		flatList.add(flat2);
+		landlordList.add(landlord1);
+		landlordList.add(landlord2);
+	}
+	@DisplayName("Test case to add a lanlord")
+	@Test
+	public void testAddLandLord() {
+		when(landLordRepository.save(landlord1)).thenReturn(landlord1);
+		when(landLordService.addLandLordService(landlord1)).thenReturn(landlord1);
+		
+		assertEquals(landlord1, landLordService.addLandLordService(landlord1));
+		
+	}
+	
+	@DisplayName("Test case ")
+	@Test
+	public void testUpdatelandLord() throws UserNotFoundException {
+		Optional<LandLord> optionallandlord1 = Optional.ofNullable(landlord1);
+		when(landLordRepository.findById((long) 1)).thenReturn(optionallandlord1 );
+		 when(landLordService.updateLandLordService(1, landlord1)).thenReturn(landlord1);
+		 assertEquals(landlord1, landLordService.updateLandLordService(1, landlord1));
+	}
+	
+	
+	
+	
+	
+
+}
