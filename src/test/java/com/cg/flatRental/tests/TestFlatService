@@ -1,1 +1,210 @@
 
+package com.cg.flatRental.flat;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.aop.ThrowsAdvice;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import com.cg.flatRental.controller.FlatController;
+import com.cg.flatRental.dto.FlatDto;
+import com.cg.flatRental.entity.Address;
+import com.cg.flatRental.entity.Amenities;
+import com.cg.flatRental.entity.Flat;
+import com.cg.flatRental.entity.LandLord;
+import com.cg.flatRental.entity.Society;
+import com.cg.flatRental.exceptions.FlatNotAvailableException;
+import com.cg.flatRental.exceptions.FlatNotFoundException;
+import com.cg.flatRental.iService.IFlatService;
+import com.cg.flatRental.repository.IFlatRepository;
+import com.cg.flatRental.repository.ILandLordRepository;
+import com.cg.flatRental.repository.ISocietyRepository;
+import com.cg.flatRental.service.FlatService;
+
+@ExtendWith(MockitoExtension.class)
+
+public class TestFlatService {
+
+	@Mock
+	private IFlatRepository flatRepository;
+	@Mock
+	private ILandLordRepository landLordRepository;
+	@Mock
+	private ISocietyRepository societyRepository;
+	
+	@InjectMocks
+	private FlatService flatService;
+	
+	Flat flat1;
+	Flat flat2;
+	FlatDto flatDto1;
+	FlatDto flatDto2;
+	List<Flat> flatList = new ArrayList<>();
+	List<FlatDto> flatDtoList = new ArrayList<>();
+	ResponseEntity<Flat> resFlat1;
+	ResponseEntity<Flat> resFlat2;
+	ResponseEntity<List<Flat>> resFlatList;
+	LandLord landlord;
+	Society society;
+	
+	@BeforeEach
+	public void setUp() {
+		flat1 = new Flat(101, "villa", 15000,null,null, true, true,  new Address("Benz circle","Vijayawada","Andhra Pradesh","India",500321),new Amenities(true,true,true,"west",15));
+		flat2 = new Flat(102, "individual", 10000,null,null, true, true, new Address("Uppal","Hyderabad","Telangana","India",500001) ,new Amenities(true,true,true,"east",12));
+		flatDto1 = new FlatDto(1, 101,  "villa", 15000,2 , "Benz circle","Vijayawada","Andhra Pradesh","India",500321,
+				true,true,false,"west",15);
+		flatDto2 = new FlatDto(2,102, "individual", 10000,4,"Uppal","Hyderabad","Telangana","India",500001 ,true,true,true,"east",12);
+		flatList.add(flat1);
+		flatList.add(flat2);
+		resFlat1 = new ResponseEntity<>(flat1, HttpStatus.OK);
+		resFlat2 = new ResponseEntity<>(flat2, HttpStatus.OK);
+		resFlatList = new ResponseEntity<List<Flat>>(flatList, HttpStatus.OK);
+		landlord = new LandLord("test",20,null,flatList,12345,"q@c.g", null);
+		society = new Society("society name", landlord, true, flatList, new Address("Uppal","Hyderabad","Telangana","India",500001));
+		
+		}
+
+	@DisplayName("JUnit test case for updating a flat")
+	@Test
+	public void testUpdateFlat() throws FlatNotFoundException {
+		Optional<Flat> newflat1 = Optional.of(flat1);
+		when(flatRepository.save(flat1)).thenReturn(flat1);
+		when(flatRepository.findById(1)).thenReturn(newflat1);
+		assertEquals( flat1, flatService.updateFlatService(1,flat1));
+		
+	}
+
+	@DisplayName("JUnit test case to get a flat by id")
+	@Test
+	public void testReadFlat() throws FlatNotFoundException {
+		Optional<Flat> newflat1 = Optional.of(flat1);
+		when(flatRepository.findById(1)).thenReturn(newflat1);
+		
+		assertEquals(flat1, flatService.getFlatService(1));
+		
+	}
+
+
+	@DisplayName("JUnit test case to get all flats having given pincode")
+
+	@Test
+	public void testReadAllFlatsByPincodeService() throws FlatNotAvailableException {
+		List<Flat> flatList = new ArrayList<>();
+		flatList.add(flat2);
+		when(flatRepository.findFlatsByPincode(500001)).thenReturn(flatList);
+		when(flatService.viewAllFlatsByPincodeService(500001)).thenReturn(flatList);
+		
+		assertEquals(flatList, flatService.viewAllFlatsByPincodeService(500001));
+		
+	}
+	@DisplayName("JUnit test case to get all flats having given flat type")
+	@Test
+	public void testReadAllFlatsByFlatType() throws FlatNotAvailableException {
+		List<Flat> flatList = new ArrayList<>();
+		flatList.add(flat1);
+		when(flatRepository.findFlatsByFlatType("villa")).thenReturn(flatList);
+		when(flatService.viewAllFlatsByFlatTypeService("villa")).thenReturn(flatList);
+		
+		assertEquals(flatList, flatService.viewAllFlatsByFlatTypeService("villa"));
+		
+	}
+	@DisplayName("JUnit test case to get all flats having given square feet")
+	@Test
+	public void testReadAllFlatsBySquareFeet() throws FlatNotAvailableException {
+		List<Flat> flatList = new ArrayList<>();
+		flatList.add(flat1);
+		when(flatRepository.findFlatsBySquareFeet(15)).thenReturn(flatList);
+		when(flatService.viewAllFlatsBySquareFeetService(15)).thenReturn(flatList);
+		
+		assertEquals(flatList, flatService.viewAllFlatsBySquareFeetService(15));
+		
+	}
+	@DisplayName("JUnit test case to get flats by area")
+	@Test
+	public void testReadAllFlatsByArea() throws FlatNotAvailableException {
+		List<Flat> flatList = new ArrayList<>();
+		flatList.add(flat2);
+		when(flatRepository.findFlatsByArea("Uppal")).thenReturn(flatList);
+		
+		assertEquals(flatList, flatService.viewAllFlatsByAreaService("Uppal"));
+		
+	}
+	@DisplayName("JUnit test case to get all flats by country")
+	@Test
+	public void testReadAllFlatsByCountry() throws FlatNotAvailableException {
+		List<Flat> flatList = new ArrayList<>();
+		flatList.add(flat2);
+		flatList.add(flat1);
+		when(flatRepository.findFlatsByCountry("India")).thenReturn(flatList);
+		
+		assertEquals(flatList, flatService.viewAllFlatsByCountryService("India"));
+		
+	}
+	@DisplayName("JUnit test case to get flat in given state")
+	@Test
+	public void testReadAllFlatsByState() throws FlatNotAvailableException {
+		List<Flat> flatList = new ArrayList<>();
+		flatList.add(flat2);
+		when(flatRepository.findFlatsByState("Telangana")).thenReturn(flatList);
+		
+		assertEquals(flatList, flatService.viewAllFlatsByStateService("Telangana"));
+		
+	}
+	@DisplayName("JUnit test case to get all flats in a city")
+	@Test
+	public void testReadAllFlatsByCity() throws FlatNotAvailableException {
+		List<Flat> flatList = new ArrayList<>();
+		flatList.add(flat1);
+		when(flatRepository.findFlatsByCity("Vijayawada")).thenReturn(flatList);
+		when(flatService.viewAllFlatsByCityService("Vijayawada")).thenReturn(flatList);
+		assertEquals(flatList, flatService.viewAllFlatsByCityService("Vijayawada"));
+		
+	}
+	@DisplayName("JUnit test case to get flats having garden")
+	@Test
+	public void testReadAllFlatsWithGarden() throws FlatNotAvailableException {
+		List<Flat> flatList = new ArrayList<>();
+		flatList.add(flat1);
+		flatList.add(flat2);
+		when(flatRepository.findFlatsFlatsWithGarden(true)).thenReturn(flatList);
+		
+		assertEquals(flatList, flatService.viewAllFlatsWithGardenService(true));
+		
+	}
+	@DisplayName("JUnit test case to get flats having swimming pool")
+	@Test
+	public void testReadAllFlatsWithSwimmingPool() throws FlatNotAvailableException {
+		List<Flat> flatList = new ArrayList<>();
+		flatList.add(flat1);
+		flatList.add(flat2);
+		resFlatList = new ResponseEntity<List<Flat>>(flatList,HttpStatus.OK);
+		when(flatRepository.findFlatsFlatsWithSwimmingPool(true)).thenReturn(flatList);
+		
+		assertEquals(flatList, flatService.viewAllFlatsWithSwimmingPoolService(true));
+		
+	}
+
+
+
+	
+}
