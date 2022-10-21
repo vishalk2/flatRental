@@ -1,0 +1,67 @@
+package com.cg.flatRental.flat;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import com.cg.flatRental.controller.AdminController;
+import com.cg.flatRental.entity.Admin;
+import com.cg.flatRental.exceptions.UserNotFoundException;
+import com.cg.flatRental.iService.IAdminService;
+import com.cg.flatRental.service.AdminService;
+
+@ExtendWith(MockitoExtension.class)
+public class TestAdminService {
+
+	@Mock
+	IAdminService iAdminService;
+	
+	@InjectMocks
+	AdminController adminController;
+	Admin admin1;
+	Admin admin2;
+	List<Admin> adminList = new ArrayList<>();;
+	ResponseEntity<Admin> responseAdminEntity;
+	ResponseEntity<List<Admin>> responseAdminEntityList;
+	@BeforeEach
+	public void setUp() {
+		admin1 =  new Admin("Admin1",101,123456,"email1@gmail.com");
+		admin2 = new Admin("Admin2",102,789456,"email2@gmail.com");
+		adminList.add(admin1);
+		adminList.add(admin2);
+		responseAdminEntity = new ResponseEntity<Admin>(admin1, HttpStatus.OK);
+		responseAdminEntityList = new ResponseEntity<List<Admin>>(adminList, HttpStatus.OK);
+	}
+	
+	@DisplayName("Test  case to add admin")
+	@Test
+	public void testAddAdmin() {
+		when(iAdminService.addAdminService(admin1)).thenReturn(admin1);
+		assertEquals(responseAdminEntity, adminController.addAdmin(admin1));
+	}
+
+	@DisplayName("Test case to check get add admin")
+	@Test
+	public void testGetAllAdmin() {
+		when(iAdminService.getAllAdminService()).thenReturn(adminList);
+		assertEquals(responseAdminEntityList, adminController.viewAllAdmin());
+	}
+	@DisplayName("Test case to get admin by id")
+	@Test
+	public void testgetAdmin() throws UserNotFoundException {
+		when(iAdminService.getAdminService(101)).thenReturn(admin1);
+		assertEquals(responseAdminEntity, adminController.viewAdmin(101));
+	}
+}
