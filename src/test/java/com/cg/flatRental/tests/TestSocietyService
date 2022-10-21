@@ -1,0 +1,94 @@
+package com.cg.flatRental.flat;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.cg.flatRental.controller.SocietyController;
+import com.cg.flatRental.dto.FlatDto;
+import com.cg.flatRental.dto.SocietyDto;
+import com.cg.flatRental.entity.Address;
+import com.cg.flatRental.entity.Amenities;
+import com.cg.flatRental.entity.Flat;
+import com.cg.flatRental.entity.LandLord;
+import com.cg.flatRental.entity.Society;
+import com.cg.flatRental.exceptions.SocietyNotFoundException;
+import com.cg.flatRental.iService.ISocietyService;
+import com.cg.flatRental.service.SocietyService;
+
+@ExtendWith(MockitoExtension.class)
+public class TestSocietyService {
+
+	@Mock
+	ISocietyService iSocietyService;
+	
+	@InjectMocks
+	SocietyController societyController;
+	
+	Society society1;
+	Society society2;
+	SocietyDto societyDto;
+	List<Society> societyList = new ArrayList<>();
+	int societyId;
+	LandLord landlord;
+	Flat flat1;
+	Flat flat2;
+	List<Flat> flatList = new ArrayList<>();
+	@BeforeEach
+	public void setUp() {
+		flat1 = new Flat(101, "villa", 15000,null,null, true, true,  new Address("Benz circle","Vijayawada","Andhra Pradesh","India",500321),new Amenities(true,true,true,"west",15));
+		flat2 = new Flat(102, "individual", 10000,null,null, true, true, new Address("Uppal","Hyderabad","Telangana","India",500001) ,new Amenities(true,true,true,"east",12));
+		flatList.add(flat1);
+		flatList.add(flat2);
+		landlord = new LandLord("test",20,null,flatList,12345,"q@c.g", null);
+
+		society1 = new Society("society name", landlord, true, flatList, new Address("Uppal","Hyderabad","Telangana","India",500001));
+
+		society1 = new Society("Dwaraka", landlord ,true,flatList, new Address("Benz circle","Vijayawada","Andhra Pradesh","India",500321));
+		societyDto = new SocietyDto();
+		societyId=1;
+		societyList.add(society1);
+		societyList.add(society2);
+	}
+	@Test
+	public void testAddSociety() throws SocietyNotFoundException {
+		when(iSocietyService.addSocietyService(societyDto)).thenReturn(society1);
+		assertEquals(society1, iSocietyService.addSocietyService(societyDto));
+	}
+	
+	@Test
+	public void testUpdateSociety() throws SocietyNotFoundException {
+		when(iSocietyService.updateSocietyService(societyId, society1)).thenReturn(society1);
+		assertEquals(society1, iSocietyService.updateSocietyService(societyId, society1));
+	}
+	
+	@Test
+	public void testRemoveSociety() throws SocietyNotFoundException {
+		when(iSocietyService.removeSocietyService(societyId)).thenReturn(society1);
+		assertEquals(society1, iSocietyService.removeSocietyService(societyId));
+	}
+	
+	@Test
+	public void testGetSocietyByIdSociety() throws SocietyNotFoundException {
+		when(iSocietyService.getSocietyServiceById(societyId)).thenReturn(society1);
+		assertEquals(society1, iSocietyService.getSocietyServiceById(societyId));
+	}
+	
+	@Test
+	public void testreadAllSociety() {
+		when(iSocietyService.readAllSocietyService()).thenReturn(societyList);
+		assertEquals(societyList, iSocietyService.readAllSocietyService());
+	}
+	
+
+	
+}
