@@ -45,7 +45,7 @@ public class FlatController {
 	}
 	
 	@PutMapping(value="/available",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	@PreAuthorize("hasAuthority('landlord','admin')")
+	@PreAuthorize("hasAuthority('admin') or hasAuthority('landlord')")
 	public ResponseEntity<Flat> updateFlatAvailable( @RequestBody FlatAvailableDto flatAvailableDto) throws FlatNotFoundException{
 		return new ResponseEntity<>(flatService.updateFlatAvailabilityService(flatAvailableDto.getFlatId(), flatAvailableDto.isAvailable()),HttpStatus.OK);
 	}
@@ -63,7 +63,7 @@ public class FlatController {
 	}
 	
 	@DeleteMapping(value="/{flatId}",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	@PreAuthorize("hasAuthority('landlord','admin')")
+	@PreAuthorize("hasAuthority('admin') or hasAuthority('landlord')")
 	public ResponseEntity<Flat> removeFlat(@PathVariable int flatId) throws FlatNotFoundException{
 		return new ResponseEntity<>(flatService.deleteFlatService(flatId),HttpStatus.OK);
 	}
@@ -133,7 +133,7 @@ public class FlatController {
 		return new ResponseEntity<>(flatList, HttpStatus.OK);
 	}
 	
-	@GetMapping(value="/search/swimmmingpool",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
+	@GetMapping(value="/search/swimmingpool",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
 	public ResponseEntity<List<Flat>> readAllFlatsWithSwimmingPool(@RequestParam("hasswimmingpool") boolean hasswimmingpool){
 		List<Flat> flatList = flatService.viewAllFlatsWithSwimmingPoolService(hasswimmingpool);
 		return new ResponseEntity<>(flatList, HttpStatus.OK);
