@@ -31,3 +31,4 @@ public interface ITenantRepository extends JpaRepository<Tenant, Long> {
 	@Modifying
 	public int updateTenantEmail(@Param("uid") long userId, @Param("email") String newEmail);
 }
+
