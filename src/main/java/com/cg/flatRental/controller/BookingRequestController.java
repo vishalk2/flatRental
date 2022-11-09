@@ -48,13 +48,13 @@ public class BookingRequestController {
 	}
 	
 	@GetMapping(value="/{reqId}",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	@PreAuthorize("hasAuthority('tenant','landlord')")
+	@PreAuthorize("hasAuthority('tenant') or hasAuthority('landlord')")
 	public ResponseEntity<BookingRequest> getBookingRequest(@PathVariable int reqId) throws BookingRequestNotFoundException{
 		return new ResponseEntity<>(bookingrequestService.viewBookingRequestService(reqId),HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value="/{reqId}",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	@PreAuthorize("hasAuthority('tenant','landlord')")
+	@PreAuthorize("hasAuthority('tenant') or hasAuthority('landlord')")
 	public ResponseEntity<BookingRequest> removeBookingRequest(@PathVariable int reqId) throws BookingRequestNotFoundException{
 		return new ResponseEntity<>(bookingrequestService.deleteBookingRequestService(reqId),HttpStatus.OK);
 	}
