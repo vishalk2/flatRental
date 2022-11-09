@@ -20,3 +20,4 @@ public interface IBookingRequestService {
 	public List<BookingRequest> getAllBookingRequestByLandLordUserName(String userName) throws UserNotFoundException;
 	public List<BookingRequest> getAllBookingRequestByTenantUserName(String userName) throws UserNotFoundException;
 }
+
