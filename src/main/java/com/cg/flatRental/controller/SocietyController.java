@@ -54,7 +54,7 @@ public class SocietyController {
 	}
 	
 	@DeleteMapping(value="/{societyId}",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	@PreAuthorize("hasAuthority('landlord','admin')")
+	@PreAuthorize("hasAuthority('admin') or hasAuthority('landlord')")
 	public ResponseEntity<Society> deleteSociety(@PathVariable int societyId) throws SocietyNotFoundException {
 		return new ResponseEntity<>(societyService.removeSocietyService(societyId), HttpStatus.OK);
 	}
@@ -66,7 +66,7 @@ public class SocietyController {
 	}
 	
 	@GetMapping(value="/{societyId}",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	@PreAuthorize("hasAuthority('landlord','admin')")
+	@PreAuthorize("hasAuthority('admin') or hasAuthority('landlord')")
 	public ResponseEntity<Society> getSociety(@PathVariable int societyId) throws SocietyNotFoundException{
 		return new ResponseEntity<>(societyService.getSocietyServiceById(societyId), HttpStatus.OK);
 	}
@@ -107,7 +107,7 @@ public class SocietyController {
 		return new ResponseEntity<>(societiesList, HttpStatus.OK);
 	}
 	
-	@PutMapping(value="/address",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
+	@PutMapping(value="/updation/address",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
 	@PreAuthorize("hasAuthority('landlord')")
 	public ResponseEntity<Society> updateSocietyAddress(@RequestBody SocietyAddressDto societyAddressDto) throws SocietyNotFoundException{
 		Address address = new Address();
@@ -119,7 +119,7 @@ public class SocietyController {
 		return new ResponseEntity<>(societyService.updateSocietyAddressService(societyAddressDto.getSocietyId(), address),HttpStatus.OK);
 	}
 	
-	@PutMapping(value="/name",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
+	@PutMapping(value="/updation/name",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
 	@PreAuthorize("hasAuthority('landlord')")
 	public ResponseEntity<Society> updateSocietyName(@RequestBody SocietyNameDto societyNameDto) throws SocietyNotFoundException{
 		return new ResponseEntity<>(societyService.updateSocietyName(societyNameDto.getSocietyId(), societyNameDto.getSocietyName()),HttpStatus.OK);
