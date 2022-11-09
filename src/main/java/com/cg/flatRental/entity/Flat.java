@@ -10,6 +10,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -27,10 +30,15 @@ public class Flat {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int flatId;
 	
+	@Min(value = 1, message = "Flat number must be greater than 0!")
+	@Max(value = 1000000000, message = "Flat number cannot be greater than 1000000000!")
 	private int flatNo;
 	
+	@NotBlank(message = "Flat Type cannot be empty")
 	private String flatType;
 	
+	@Min(value = 1, message = "Rental Cost must be greater than 0!")
+	@Max(value = 1000000000, message = "Rental Cost cannot be greater than 1000000000!")
 	private double rentalCost;
 	
 	@ManyToOne
@@ -56,6 +64,23 @@ public class Flat {
 	public Flat() {
 	}
 
+	public Flat(
+			@Min(value = 1, message = "Flat number must be greater than 0!") @Max(value = 1000000000, message = "Flat number cannot be greater than 1000000000!") int flatNo,
+			@NotBlank(message = "Flat Type cannot be empty") String flatType,
+			@Min(value = 1, message = "Rental Cost must be greater than 0!") @Max(value = 1000000000, message = "Rental Cost cannot be greater than 1000000000!") double rentalCost,
+			LandLord flatLandLord, Society flatSociety, boolean available, boolean approved, Address flatAddress,
+			Amenities flatAmenities) {
+		super();
+		this.flatNo = flatNo;
+		this.flatType = flatType;
+		this.rentalCost = rentalCost;
+		this.flatLandLord = flatLandLord;
+		this.flatSociety = flatSociety;
+		this.available = available;
+		this.approved = approved;
+		this.flatAddress = flatAddress;
+		this.flatAmenities = flatAmenities;
+	}
 
 	public int getFlatId() {
 		return flatId;
