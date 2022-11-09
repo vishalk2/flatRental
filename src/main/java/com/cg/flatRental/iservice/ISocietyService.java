@@ -37,3 +37,4 @@ public interface ISocietyService {
 	
 	public Society updateSocietyName(int societyId, String societyName) throws SocietyNotFoundException;
 }
+
