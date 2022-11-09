@@ -89,6 +89,6 @@ public interface IFlatRepository extends JpaRepository<Flat, Integer> {
 	public List<Flat> findFlatsByFacing(@Param("hf") String houseFacing);
 
 	// find flats by their area (sq feet)
-	@Query("select f from Flat f where f.available = true and f.flatAmenities.squareFeet = :sf")
+	@Query("select f from Flat f where f.available = true and f.flatAmenities.squareFeet <= :sf")
 	public List<Flat> findFlatsBySquareFeet(@Param("sf") double squareFeet);
 }
