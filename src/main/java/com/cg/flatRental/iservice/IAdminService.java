@@ -13,3 +13,4 @@ public interface IAdminService {
 	
 	public List<Admin> getAllAdminService();
 }
+
