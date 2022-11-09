@@ -34,4 +34,3 @@ public interface IBookingRequestRepository extends JpaRepository<BookingRequest,
 	@Query("select b from BookingRequest b where b.tenant.userName = :uname")
 	public List<BookingRequest> getAllBookingRequestsByTenantUserName(@Param("uname") String userName);
 }
-
