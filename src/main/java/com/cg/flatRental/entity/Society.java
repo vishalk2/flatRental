@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -28,6 +28,7 @@ public class Society {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int societyId;
 	
+	@NotBlank(message = "Society Name cannot be empty")
 	private String societyName;
 	
 	@ManyToOne
@@ -46,6 +47,17 @@ public class Society {
 	private Address societyAddress;
 	
 	public Society(){
+	}
+
+
+	public Society(@NotBlank(message = "Society Name cannot be empty") String societyName, LandLord societyLandlord,
+			boolean approved, List<Flat> flatList, Address societyAddress) {
+		super();
+		this.societyName = societyName;
+		this.societyLandlord = societyLandlord;
+		this.approved = approved;
+		this.flatList = flatList;
+		this.societyAddress = societyAddress;
 	}
 
 	public int getSocietyId() {
