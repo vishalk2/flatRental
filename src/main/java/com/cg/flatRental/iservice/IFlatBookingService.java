@@ -13,3 +13,4 @@ public interface IFlatBookingService {
 	public FlatBooking viewFlatBookingService(int bookingId) throws FlatBookingException;
 	public List<FlatBooking> viewAllFlatBookingService();
 }
+
