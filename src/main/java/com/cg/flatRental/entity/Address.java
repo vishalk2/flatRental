@@ -1,26 +1,37 @@
 package com.cg.flatRental.entity;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotBlank;
 
 @Embeddable
 public class Address {
+	@NotBlank(message = "Area cannot be empty")
 	private String area;
+	@NotBlank(message = "City cannot be empty")
 	private String city;
+	@NotBlank(message = "State cannot be empty")
 	private String state;
+	@NotBlank(message = "Country cannot be empty")
 	private String country;
+
 	private int pincode;
 	
 	public Address() {
 	}
 
-	public Address(String area, String city, String state, String country, int pinCode) {
+	public Address(@NotBlank(message = "Area cannot be empty") String area,
+			@NotBlank(message = "City cannot be empty") String city,
+			@NotBlank(message = "State cannot be empty") String state,
+			@NotBlank(message = "Country cannot be empty") String country,
+			int pincode) {
 		super();
 		this.area = area;
 		this.city = city;
 		this.state = state;
 		this.country = country;
-		this.pincode = pinCode;
+		this.pincode = pincode;
 	}
+
 
 	public String getArea() {
 		return area;
