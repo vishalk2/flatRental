@@ -46,3 +46,4 @@ public class AdminController {
 		return new ResponseEntity<>(adminService.getAllAdminService(), HttpStatus.OK);
 	}
 }
+
