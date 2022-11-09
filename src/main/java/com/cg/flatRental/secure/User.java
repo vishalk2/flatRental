@@ -1,11 +1,13 @@
 package com.cg.flatRental.secure;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -17,10 +19,18 @@ public class User {
 	@Id
 	@GeneratedValue
 	private long userId;
+	
+	@Column(unique = true)
+	@NotBlank(message = "User Name cannot be empty")
 	private String userName;
+	
+	@NotBlank(message = "Password cannot be empty")
 	@JsonIgnore
 	private String password;
+	
+	@NotBlank(message = "User Type cannot be empty")
 	private String userType;
+	
 	public String getUserName() {
 		return userName;
 	}
@@ -44,7 +54,5 @@ public class User {
 	}
 	public void setUserId(long userId) {
 		this.userId = userId;
-	}
-	
-	
+	}	
 }
