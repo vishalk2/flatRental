@@ -54,3 +54,4 @@ public interface ISocietyRepository extends JpaRepository<Society, Integer>{
 	@Query("select s from Society s where s.societyAddress.pincode = :p")
 	public List<Society> filterBySocietyPincode(@Param("p") int pincode);
 }
+
