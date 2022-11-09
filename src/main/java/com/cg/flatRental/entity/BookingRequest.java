@@ -44,8 +44,17 @@ public class BookingRequest {
 	
 	public BookingRequest() {
 	}
-	
-	
+
+	public BookingRequest(Flat flat, Tenant tenant, LocalDate bookingFromDate, LocalDate bookingToDate,
+			boolean approved) {
+		super();
+		this.flat = flat;
+		this.tenant = tenant;
+		this.bookingFromDate = bookingFromDate;
+		this.bookingToDate = bookingToDate;
+		this.approved = approved;
+	}
+
 	public int getReqId() {
 		return reqId;
 	}
