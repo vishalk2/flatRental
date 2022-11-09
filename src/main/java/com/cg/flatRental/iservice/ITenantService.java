@@ -27,3 +27,4 @@ public interface ITenantService {
 	
 	public Tenant updateTenantEmailService(long userId, String email) throws UserNotFoundException;
 }
+
