@@ -32,3 +32,4 @@ public interface ILandLordRepository extends JpaRepository<LandLord, Long> {
 	@Modifying
 	public int updateLandLordEmail(@Param("uid") long userId, @Param("email") String newEmail);
 }
+
