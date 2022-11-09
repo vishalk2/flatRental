@@ -35,7 +35,7 @@ public class BookingRequestService implements IBookingRequestService {
 
 	@Override
 	public BookingRequest addBookingRequestService(BookingRequestDto bookingReqDto) throws FlatNotFoundException, FlatAvailabilityException, BookingRequestNotFoundException {
-		int flatId = bookingrequestRepository.getFlatIdByBookingRequestId(bookingReqDto.getFlatId());
+		int flatId = bookingReqDto.getFlatId();
 		Optional<Flat> optionalFlat = flatRepository.findById(flatId);
 		if(optionalFlat.isPresent()) {
 			Flat flat = optionalFlat.get();
@@ -138,7 +138,7 @@ public class BookingRequestService implements IBookingRequestService {
 			}
 		}
 		else {
-			 throw new BookingRequestNotFoundException("Booking request details not found!");
+			 throw new BookingRequestNotFoundException("Booking request not found!");
 		}
 	}
 
