@@ -46,7 +46,7 @@ public class LandLordController {
 	}
 	
 	@DeleteMapping(value="/{userId}",produces={"application/json","application/xml"}, consumes={"application/json","application/xml"})
-	@PreAuthorize("hasAuthority('landlord','admin')")
+	@PreAuthorize("hasAuthority('admin') or hasAuthority('landlord')")
 	public ResponseEntity<LandLord> removeLandLord(@PathVariable long userId) throws UserNotFoundException{
 		return new ResponseEntity<>(landlordService.deleteLandLordService(userId), HttpStatus.OK);
 	}
@@ -65,13 +65,13 @@ public class LandLordController {
 	}
 	
 	@GetMapping(value="/valid/{username}/{password}",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	@PreAuthorize("hasAuthority('landlord','admin')")
+	@PreAuthorize("hasAuthority('admin') or hasAuthority('landlord')")
 	public ResponseEntity<Boolean> isValidLandLord(@PathVariable String username, @PathVariable String password){
 		return new ResponseEntity<>(landlordService.isValidLandLord(username, password),HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/user/{username}",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	@PreAuthorize("hasAuthority('landlord','admin')")
+	@PreAuthorize("hasAuthority('admin') or hasAuthority('landlord')")
 	public ResponseEntity<Long> getLandLordId(@PathVariable String username) throws UserNotFoundException{
 		return new ResponseEntity<>(landlordService.getUserIdByUserName(username),HttpStatus.OK);
 	}
