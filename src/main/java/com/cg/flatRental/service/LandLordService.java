@@ -71,7 +71,9 @@ public class LandLordService implements ILandLordService {
 
 	@Override
 	public long getUserIdByUserName(String userName) throws UserNotFoundException {
-		long userId = landlordRepository.findByUserName(userName).getUserId();
+		LandLord landlord = landlordRepository.findByUserName(userName);
+		long userId = landlord.getUserId();
+		System.out.println(userId);
 		return userId;
 	}
 
