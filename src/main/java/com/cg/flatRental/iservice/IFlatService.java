@@ -52,3 +52,4 @@ public interface IFlatService {
 	
 	public Flat updateFlatAmenities(int flatId, Amenities amenities) throws FlatNotFoundException;
 }
+
