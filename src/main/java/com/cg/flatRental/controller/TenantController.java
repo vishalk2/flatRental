@@ -46,7 +46,7 @@ public class TenantController {
 	}
 	
 	@DeleteMapping(value="/{userId}",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	@PreAuthorize("hasAuthority('tenant')")
+	@PreAuthorize("hasAuthority('admin') or hasAuthority('tenant')")
 	public ResponseEntity<Tenant> removeTenant(@PathVariable long userId) throws UserNotFoundException{
 		return new ResponseEntity<>(tenantService.deleteTenantService(userId), HttpStatus.OK);
 	}
@@ -64,13 +64,13 @@ public class TenantController {
 	}
 	
 	@GetMapping(value="/valid/{username}/{password}",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	@PreAuthorize("hasAuthority('tenant','admin')")
+	@PreAuthorize("hasAuthority('admin') or hasAuthority('tenant')")
 	public ResponseEntity<Boolean> isValidTenant(@PathVariable String username, @PathVariable String password){
 		return new ResponseEntity<>(tenantService.isValidTenant(username, password),HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/user/{username}",produces= {"application/json","application/xml"},consumes= {"application/json","application/xml"})
-	@PreAuthorize("hasAuthority('tenant','admin')")
+	@PreAuthorize("hasAuthority('admin') or hasAuthority('tenant')")
 	public ResponseEntity<Long> getTenantId(@PathVariable String username) throws UserNotFoundException{
 		return new ResponseEntity<>(tenantService.getUserIdByUserName(username),HttpStatus.OK);
 	}
