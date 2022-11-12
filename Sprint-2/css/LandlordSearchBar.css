@@ -1,0 +1,31 @@
+#search-bar{
+    border:2px solid blue;
+    border-radius: 100px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height:fit-content;
+    
+    max-width: 55rem;
+    padding:10px;
+    
+}
+#searchbar-org-dropdown{
+    border-radius: 50px;
+    width:20vh;
+    max-width: min-content
+}
+
+
+#input{
+    border: none;
+}
+
+
+#search-bar-button{
+    outline: none;
+    border: none;
+    border-radius: 100px;
+    width:8rem;
+    background-color: rgb(112, 198, 232);  
+    height: 40px;
+}
