@@ -74,7 +74,9 @@ function BookingRequest() {
                 
             </div>
             <div className="ms-auto" style={{width:'fit-content'}}>
+                <Link to="/flat/booking/{flatId}">
                 <Button variant='contained'>Book the flat</Button>
+                </Link>
             </div>
 
                 
