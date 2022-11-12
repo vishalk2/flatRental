@@ -45,6 +45,14 @@ function Login(props) {
 
     return (
         <>
+        <center>
+        <Grid container> 
+            <Grid item   md={6} className="d-none d-md-block">
+                <Box>
+                    
+                </Box>
+            </Grid>
+            <Grid item md={6}>
         <div id="a">
             <form id="login-form" onSubmit={handleSubmit}>
                 <h1>Login</h1>
@@ -66,6 +74,9 @@ function Login(props) {
                 <p style={{paddingTop:'10px'}}>Dont have an account ? <a href="/register" style={{textDecoration:'none'}}>register</a></p>
             </form>
         </div>
+        </Grid>
+        </Grid>
+        </center>
         </>
     );
 }
