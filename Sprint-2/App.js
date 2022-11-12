@@ -1,40 +1,37 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Admin from './Admin';
-import Footer from './Footer'; 
 
-
-import AdminLogin from './AdminLogin';
 import './App.css';
-import {BrowserRouter as Router,Routes ,Route , Link  } from 'react-router-dom';
+import Home from './Home';
+import NavbarComp from './NavbarComp.js';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from './Login';
+import Register from './Register';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import BookingRequest from './BookingRequest';
 
 function App() {
-
   return (
-    <>
-    <Router>
-    <div className="App">
-     
+    <div>
+
+      <Router>
+
         <Routes>
-          <Route  path ="/" element = {<Admin/>}>
+
+          <Route path="/" element={<Home />} />
           
-          </Route>
-          <Route  path ="/AdminLogin" element = {<AdminLogin/>}>
-          </Route>
-        
-          <Route  path ="/Footer" element = {<Footer/>}>
-          </Route>
+          <Route path="/home" element={<Home />} />
+ 
+          <Route path='/login' element={<Login />} />
+
+          <Route path="/register" element={<Register />} />
+
+          <Route path="/flat/booking/{flatId}" element={<BookingRequest />} />
+
+
+
         </Routes>
-     
+      </Router>
     </div>
-    
-    </Router>
-
-    
-
-  
-  </>
   );
-  
 }
 
 export default App;
