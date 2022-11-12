@@ -1,0 +1,25 @@
+#flat-card{
+    border: 1px solid rgba(9, 9, 10, 0.5);
+    min-height: fit-content;
+    margin: 25px;
+    width:70%;
+    border-radius: 10px;
+    box-shadow: rgba(50,50,93,0.25) 0px 50px 100px, rgba(0,0,0,0.3) 0px 30px 60px -30px;
+    
+    
+}
+
+.flat-card-image{
+    padding: 10px;
+    object-fit: contain;
+    border-radius: 20px;
+}
+.flat-name{
+    margin-left: 25px;
+    padding-bottom: 10px;
+}
+
+.flat-desc{
+    padding-top:20px ;
+}
+
