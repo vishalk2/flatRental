@@ -1,0 +1,34 @@
+#navbar-main {
+    background: linear-gradient(90deg, rgba(9,9,121,1) 25%, rgba(0,212,255,1) 100%);
+    padding:10px;
+    
+
+}
+
+#navbar-main p{
+    color :white;
+}
+
+
+.lo Button{
+    padding:50px;
+    margin: 25px;
+    border-radius: 15px;
+}
+
+
+#info-under-nav{
+    justify-content:center;
+    text-align: center;
+    background-color: rgb(128, 232, 239);
+    padding:1%;
+}
+
+.carousel{
+    max-height:70vh; 
+}
+.carousel-image{
+    height:68vh;
+    width: 70rem;
+    
+}
