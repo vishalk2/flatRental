@@ -1,26 +1,17 @@
-// private int landlordId;
-// 	private int flatNo;
-// 	private String flatType;
-// 	private double rentalCost;
-	
-// 	private int societyId;
-	
-// 	private String area;
-// 	private String city;
-// 	private String state;
-// 	private String country;
-// 	private int pincode;
-	
-// 	private boolean garden;
-// 	private boolean swimmingPool;
-// 	private boolean carParking;
-// 	private String houseFacing;
-// 	private double squareFeet;
+
 import React, { useState } from 'react';
+import FlatDto from './FlatDto';
+import FlatService from './FlatService';
+import { useNavigate } from "react-router";
 
 function AddFlat(props) {
-    const initialValues={area:"",state:"",city:"",country:"",pincode:0,landlordId:0,societyId:0,flatId:0,flatType:'',rentalCost:0, garden:false,carParking:false, swimmingPool:false, houseFacing:'' }
+    const[flatDto, setFlatDto] = useState({FlatDtoKey: new FlatDto()});
+    const navigate = useNavigate();
+    let flatService = new FlatService();
+    const initialValues={area:"",state:"",city:"",country:"",pincode:0,landlordId:0,societyId:0,flatNo:0,flatType:'',rentalCost:0, garden:false,carParking:false, swimmingPool:false, houseFacing:'', squareFeet:0 }
     
+    
+
     const [formValues , setFormValues] = useState(initialValues);
 
     const handleChange = (event) =>{
@@ -31,8 +22,19 @@ function AddFlat(props) {
     
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("sasi")
+        console.log("sasi");
         console.log(JSON.stringify(formValues));
+        setFlatDto({ FlatDtoKey: { ...formValues } });
+        console.log(JSON.stringify(flatDto));
+        flatService.addFlat(flatDto.FlatDtoKey)
+        .then((result) => {
+          alert(JSON.stringify(result));
+
+          navigate("/society/add");
+        }).catch((error) => {
+            alert(error.message);
+          });
+
     }
 
     const handleCheckBox = (e) => {
@@ -62,7 +64,7 @@ function AddFlat(props) {
                 <div className="input-group" style={{justifyContent:'space-between'}}>
                     <div className="field me-auto" style={{ width:'fit-content'}}>
                         <label className="me-auto" style={{ width:'fit-content'}}><p style={{color:'red', width:'fit-content'}} className="me-auto">*</p>Flat No.</label>
-                        <input type="number" name="flatId" placeholder='Flat no.'  onChange={handleChange} required/>
+                        <input type="number" name="flatNo" placeholder='Flat no.'  onChange={handleChange} required/>
                     </div>
                     <div className="field me-auto" style={{ width:'fit-content'}}>
                         <label className="me-auto" style={{ width:'fit-content'}}><p style={{color:'red', width:'fit-content'}} className="me-auto">*</p>Flat Type</label>
@@ -114,6 +116,10 @@ function AddFlat(props) {
                     <div className="me-auto " style={{width:'fit-content'}}>
                         <label>House Facing</label>
                         <input type="text" name="houseFacing" placeholder='N-E-W-S' onChange={handleChange} required/>
+                    </div>
+                    <div className="me-auto " style={{width:'fit-content'}}>
+                        <label>Square Feet</label>
+                        <input type="text" name="squareFeet" placeholder='Square feet' onChange={handleChange} required/>
                     </div>
                     
                     <div className="field ms-auto" style={{width:'fit-content', marginTop:'2%'}} >
