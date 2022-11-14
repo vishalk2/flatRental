@@ -1,17 +1,23 @@
-import { Box, Button, Grid } from '@mui/material';
-import React from 'react';
-import { json } from 'react-router-dom';
+import { CardActions, CardContent, CardMedia, IconButton } from '@mui/material';
+import React, { useState } from 'react';
+import { Button, Card } from 'react-bootstrap';
 import carousel1 from './images/carousel1.jpg';
+import ShareIcon from '@mui/icons-material/Share';
+import InfoIcon from '@mui/icons-material/Info';
+import FlatService from './FlatService';
+import FlatListInfo from './FlatListInfo';
+
+import { Box, Grid } from '@mui/material';
+import { json, Link } from 'react-router-dom';
 import PoolIcon from '@mui/icons-material/Pool'
 import CarIcon from '@mui/icons-material/DirectionsCar'
 import ParkingIcon from '@mui/icons-material/LocalParking'
 import ParkIcon from '@mui/icons-material/Park'
 
-function BookingRequest() {
-    console.log("hello");
-    const amenities = {carparking:true, swimmingPool:true, garden:true, flat:"Villa",OneBhk:"", TwoBhk:"3BHK"};
+function FlatInfo({flat}) {
     return (
-        <div className="container">
+        <div>
+            
             <Box id="flat-card">
             <Grid container className="l">
                 <Grid item xs={12} sm={12} md={5} lg={7}>
@@ -23,13 +29,13 @@ function BookingRequest() {
                     
 
                     <Box>
-                        <p>Society :</p>
-                        <p>Flat no :</p>
-                        <p>Flat Type :</p>
-                        <p>Address</p>
+                        <p></p>
+                        <p>Flat no : {flat.flatNo}</p>
+                        <p>Flat Type : {flat.flatType}</p>
+                        <p>Address {flat.flatAddress.city}</p>
                         <p></p>
                     </Box>
-{amenities.garden?(<p>hell0</p>):(<p>hi</p>)}
+{flat.flatAmenities.garden?(<p>hell0</p>):(<p>hi</p>)}
 
                 </Grid>
             </Grid>
@@ -50,31 +56,35 @@ function BookingRequest() {
 
 
 
-                    Object.keys(amenities).map(
-                        (key,index) => {
-                            return(
-                                <div key={index} > 
-                                    <h2>
-                                        { typeof amenities[key] === 'boolean' ? 
-                                        amenities[key] ? 
-                                        (
-                                            <div   style={{}}>{
-                                            key === "swimmingPool" ? (<div className="me-auto" style={{width:'fit-content', fontSize:'16px'}}><PoolIcon  />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Swimming is available through out the day</div>):
-                                            key === "carparking" ? (<div className="me-auto" style={{width:'fit-content', fontSize:'16px'}}><CarIcon /><ParkingIcon/>&nbsp;&nbsp;A spaceous car parking is available</div>):
-                                            key === "garden" ? (<div className="me-auto" style={{width:'fit-content', fontSize:'16px'}}><ParkIcon />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Park is available, it has all children games</div> ):null}
-                                            </div>
-                                        ):null
-                                        :(<div style={{ width:'fit-content', fontSize:'24px',marginTop:10}} className="me-auto"><p >{amenities[key]}</p></div>)}
-                                    </h2>
-                                </div>
-                            )
-                        }
-                    )
+                    // Object.keys(amenities).map(
+                    //     (key,index) => {
+                    //         return(
+                    //             <div key={index} > 
+                    //                 <h2>
+                    //                     { typeof amenities[key] === 'boolean' ? 
+                    //                     amenities[key] ? 
+                    //                     (
+                    //                         <div   style={{}}>{
+                    //                         key === "swimmingPool" ? (<div className="me-auto" style={{width:'fit-content', fontSize:'16px'}}><PoolIcon  />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Swimming is available through out the day</div>):
+                    //                         key === "carparking" ? (<div className="me-auto" style={{width:'fit-content', fontSize:'16px'}}><CarIcon /><ParkingIcon/>&nbsp;&nbsp;A spaceous car parking is available</div>):
+                    //                         key === "garden" ? (<div className="me-auto" style={{width:'fit-content', fontSize:'16px'}}><ParkIcon />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Park is available, it has all children games</div> ):null}
+                    //                         </div>
+                    //                     ):null
+                    //                     :(<div style={{ width:'fit-content', fontSize:'24px',marginTop:10}} className="me-auto"><p >{amenities[key]}</p></div>)}
+                    //                 </h2>
+                    //             </div>
+                    //         )
+                    //     }
+                    // )
                     }
                 
             </div>
             <div className="ms-auto" style={{width:'fit-content'}}>
-                <Link to="/flat/booking/{flatId}">
+                <Link to={{pathname:`flat/booking/${flat.flatId}`,
+                           
+                            
+                           
+            }}>
                 <Button variant='contained'>Book the flat</Button>
                 </Link>
             </div>
@@ -83,8 +93,10 @@ function BookingRequest() {
             
             </Box>
             
+
         </div>
+        
     );
 }
 
-export default BookingRequest;
+export default FlatInfo;
