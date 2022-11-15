@@ -3,8 +3,12 @@ import React, { useState } from 'react';
 import FlatDto from './FlatDto';
 import FlatService from './FlatService';
 import { useNavigate } from "react-router";
+import { Box } from '@mui/system';
+import Societyinfo from './Societyinfo';
+import FlatAdd from './FlatAdd';
 
 function AddFlat(props) {
+    const[result, setResult] = useState();
     const[flatDto, setFlatDto] = useState({FlatDtoKey: new FlatDto()});
     const navigate = useNavigate();
     let flatService = new FlatService();
@@ -19,7 +23,9 @@ function AddFlat(props) {
         setFormValues({...formValues, [name]: value});
         console.log(JSON.stringify(formValues));
     }
-    
+    const onYes =() =>{
+        navigate("/login");
+      }
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("sasi");
@@ -28,9 +34,7 @@ function AddFlat(props) {
         console.log(JSON.stringify(flatDto));
         flatService.addFlat(flatDto.FlatDtoKey)
         .then((result) => {
-          alert(JSON.stringify(result));
-
-          navigate("/society/add");
+            setResult(result);
         }).catch((error) => {
             alert(error.message);
           });
@@ -46,6 +50,23 @@ function AddFlat(props) {
     }
     return (
         <div>
+            {
+                result?
+                <center>
+        <Box>
+        {
+                
+                result ?(
+                                  
+                    <FlatAdd key={result.flatId} flat={result} />
+                   
+              
+              ):null
+            }
+            {result?<button onClick={onYes}>ok</button>:null}
+        </Box>
+      </center>
+      :
             <section id="addSociety">
                 <form  onSubmit={handleSubmit}>
                 <div className="ui form ms-auto">
@@ -129,6 +150,7 @@ function AddFlat(props) {
                     </div>
                 </form>
             </section>
+}
         </div>
     );
 }
