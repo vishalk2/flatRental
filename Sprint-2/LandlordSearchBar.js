@@ -9,16 +9,39 @@ import HomeIcon from '@mui/icons-material/Home'
 import DropdownMenu from 'react-bootstrap/esm/DropdownMenu';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { Grid } from '@mui/material';
+import FlatService from './FlatService';
+import FlatInfo from './FlatInfo';
 
 export default function LandpageSearchBar(){
-    const initialValues = {location : "",flat:false, plot:false, OneBHK:false, TwoBhk:false, Flat: false, budget:""};
-    var count=0;
+    let flatService = new FlatService()
+    const initialValues = {location : "", flat :false, plot:false, OneBHK:false, TwoBHK:false, Flat: false, budget:""};
+    const[flats, setFlats] = useState();
+    var [count, setCount] =useState(0);
     const [searchBarValues, setSearchBarValues] = useState(initialValues);
 
+    const getAllFlats = () => {
+        flatService.readAllFlats().then((result) => {
+            console.log("here");
+            setFlats(result);
+            console.log(result);
+        });
+
+    }
+
+    const searchBar = (searchBarValues) => {
+         if( flats.flatAddress?flats.flatAddress.city===searchBarValues.location:null && flats.rentalCost<=searchBarValues.budget){
+            
+            return(<FlatInfo key={flats.flatId} flat={flats} />) 
+
+         }
+
+    }
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log("submitted");
         console.log(JSON.stringify(searchBarValues));
+        getAllFlats();
+        searchBar(searchBarValues);
     }
  
     const handleChange =(e) => {
@@ -26,8 +49,7 @@ export default function LandpageSearchBar(){
         console.log(name+" : "+value);
         setSearchBarValues({...searchBarValues,[name]:value});
         console.log(JSON.stringify(searchBarValues));
-        count=count+1;
-        console.log(count); 
+        
     }
     const handleDropdownClick =(e) => {
         const name = e.target.name;
@@ -35,12 +57,15 @@ export default function LandpageSearchBar(){
         console.log(value);
         setSearchBarValues({...searchBarValues,[name]:!value});
         console.log(JSON.stringify(searchBarValues));
+        setCount((count) => count+1)
+        console.log(count); 
     }
    
         return (
             <>
                 <center>
-                <div className=" container" id="search-bar">
+                <div className=" " id="search-bar">
+                    
                 <Grid container>
                     {/* Location block */}
                     <Grid item xs={6} sm={3} md={3} style={{marginTop:'1%'}}>
@@ -49,7 +74,9 @@ export default function LandpageSearchBar(){
                                 <LocationOnIcon style={{ color: "rgb(112, 198, 232)", paddingTop:5 }} />
                             </Grid>
                             <Grid item xs={10} sm={10} md={4}>
-                                <input type="text" placeholder="Enter City, Project" id="input" name="location" onChange={handleChange}/>
+                                <input type="text" placeholder="Enter City, Project" id="input" name="location" onChange={handleChange }
+                                
+                                />
                                 
                             </Grid>
                         </Grid>
@@ -58,7 +85,7 @@ export default function LandpageSearchBar(){
                     <Grid item xs={6} sm={2} md={2} >
                         
                     <Dropdown >
-                            <Dropdown.Toggle id="searchbar-org-dropdown"><HomeIcon />Flat</Dropdown.Toggle>
+                            <Dropdown.Toggle id="searchbar-org-dropdown"><HomeIcon />Flat{count}</Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item >
                                     <Dropdown>
@@ -84,7 +111,7 @@ export default function LandpageSearchBar(){
                             <CurrencyRupeeIcon />
                             </Grid>
                             <Grid item xs={8} sm={10} md={4} >
-                            <input type="text" placeholder='Budget' name ="budget" onChange={handleChange}/>
+                            <input type="text" placeholder='Budget' style={{border:'1px solid black'}} name ="budget" onChange={handleChange}/>
                             </Grid>
                         </Grid>
                     </Grid>
